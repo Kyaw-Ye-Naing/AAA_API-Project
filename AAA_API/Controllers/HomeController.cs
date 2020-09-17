@@ -7,31 +7,37 @@ using Hangfire;
 using Microsoft.AspNetCore.Authorization;
 using Microsoft.AspNetCore.Mvc;
 using Microsoft.CodeAnalysis.CSharp.Syntax;
+using Microsoft.Extensions.Configuration;
 using Microsoft.Extensions.Logging;
+using Microsoft.VisualStudio.Web.CodeGeneration.EntityFrameworkCore;
 using Newtonsoft.Json;
 using RestSharp;
+using Microsoft.EntityFrameworkCore;
 
 namespace AAA_API.Controllers
 {
-    [Authorize]
+   
     [ApiController]
     [Route("api/[controller]")]
     public class HomeController : ControllerBase
     {
         private readonly ILogger<HomeController> _logger;
         private readonly Gambling_AppContext _context;
-        //private IUserService userService;
-        public HomeController(ILogger<HomeController> logger, Gambling_AppContext context)
+       private readonly IConfiguration _configuartion;
+        public HomeController(ILogger<HomeController> logger, Gambling_AppContext context,IConfiguration configuration)
         {
             _logger = logger;
             _context = context;
+            _configuartion = configuration;
         }
 
-
+        [Route("home")]
         [HttpGet]
         public IEnumerable<TblLeague> Index()
         {
-            
+            //For bro aung kyaw nyunt
+            //Enable to initialize as a public variable but it can call within classes as shown below
+            var connString = _configuartion.GetConnectionString("DefaultConnection");
             return _context.TblLeague.ToList();
         }
 
