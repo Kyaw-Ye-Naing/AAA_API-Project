@@ -41,20 +41,20 @@ namespace AAA_API
 
             services.AddDbContext<Gambling_AppContext>(options => options.UseSqlServer(Configuration.GetConnectionString("DefaultConnection")));
        
-            services.AddHsts(options =>
-            {
-                options.Preload = true;
-                options.IncludeSubDomains = true;
-                options.MaxAge = TimeSpan.FromDays(60);
-                options.ExcludedHosts.Add("example.com");
-                options.ExcludedHosts.Add("www.example.com");
-            });
+           // services.AddHsts(options =>
+           // {
+             //   options.Preload = true;
+             ////   options.IncludeSubDomains = true;
+               // options.MaxAge = TimeSpan.FromDays(60);
+               // options.ExcludedHosts.Add("example.com");
+               // options.ExcludedHosts.Add("www.example.com");
+          //  });
 
-            services.AddHttpsRedirection(options =>
-            {
-                options.RedirectStatusCode = StatusCodes.Status307TemporaryRedirect;
-                options.HttpsPort = 5001;
-            });
+         //   services.AddHttpsRedirection(options =>
+          //  {
+           //     options.RedirectStatusCode = StatusCodes.Status307TemporaryRedirect;
+            //    options.HttpsPort = 5001;
+            //});
 
 
         }
@@ -67,17 +67,17 @@ namespace AAA_API
             {
                 app.UseDeveloperExceptionPage();
             }
-            else
-           {
-                app.UseExceptionHandler("/Error");
-                // The default HSTS value is 30 days. You may want to change this for production scenarios, see https://aka.ms/aspnetcore-hsts.
-                app.UseHsts();
-            }
+         //   else
+         //  {
+           //     app.UseExceptionHandler("/Error");
+          //      // The default HSTS value is 30 days. You may want to change this for production scenarios, see https://aka.ms/aspnetcore-hsts.
+            //    app.UseHsts();
+           // }
 
           
 
 
-            app.UseHttpsRedirection();
+           // app.UseHttpsRedirection();
             app.UseRouting();
 
             app.UseAuthorization();
