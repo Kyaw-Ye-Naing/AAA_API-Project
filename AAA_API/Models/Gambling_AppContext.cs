@@ -37,7 +37,6 @@ namespace AAA_API.Models
         {
             if (!optionsBuilder.IsConfigured)
             {
-#warning To protect potentially sensitive information in your connection string, you should move it out of source code. See http://go.microsoft.com/fwlink/?LinkId=723263 for guidance on storing connection strings.
                 optionsBuilder.UseSqlServer("Data Source=172.105.121.13;Initial Catalog=Gambling_App;user id=sa;password=209851@ung");
             }
         }
@@ -46,15 +45,16 @@ namespace AAA_API.Models
         {
             modelBuilder.Entity<TblConfirmLeague>(entity =>
             {
-                entity.HasNoKey();
+                entity.HasKey(e => e.ConfirmLeagueId);
 
                 entity.ToTable("tbl_confirmLeague");
 
-                entity.Property(e => e.Active).HasColumnName("active");
-
                 entity.Property(e => e.ConfirmLeagueId)
                     .HasColumnName("confirmLeagueId")
-                    .HasColumnType("decimal(18, 0)");
+                    .HasColumnType("decimal(18, 0)")
+                    .ValueGeneratedOnAdd();
+
+                entity.Property(e => e.Active).HasColumnName("active");
 
                 entity.Property(e => e.LeagueId)
                     .HasColumnName("leagueId")

@@ -30,11 +30,7 @@ namespace AAA_API.Controllers
         }
 
         // GET: api/TblConfirmLeagues
-        [HttpGet]
-        public async Task<ActionResult<IEnumerable<TblConfirmLeague>>> GetTblConfirmLeague()
-        {
-            return await _context.TblConfirmLeague.ToListAsync();
-        }
+      
 
         // GET: api/TblLeagues/5
         [HttpGet("{id}")]
@@ -83,7 +79,7 @@ namespace AAA_API.Controllers
 
         // POST: api/TblLeagues
         // To protect from overposting attacks, enable the specific properties you want to bind to, for
-        [Route("insert")]
+       
         [HttpPost]
         public IActionResult PostTblLeague(TblLeague lg)
         {

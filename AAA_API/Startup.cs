@@ -7,6 +7,7 @@ using Hangfire;
 using Hangfire.MemoryStorage;
 using Microsoft.AspNetCore.Builder;
 using Microsoft.AspNetCore.Hosting;
+using Microsoft.AspNetCore.Http;
 using Microsoft.AspNetCore.HttpsPolicy;
 using Microsoft.AspNetCore.Mvc;
 using Microsoft.EntityFrameworkCore;
@@ -27,17 +28,27 @@ namespace AAA_API
         public IConfiguration Configuration { get; }
 
         // This method gets called by the runtime. Use this method to add services to the container.
-        public void ConfigureServices(IServiceCollection services)
+        public void ConfigureServices(IServiceCollection services, IWebHostEnvironment _env)
         {
+          
             services.AddControllers();
             services.AddHangfire(Config =>
           Config.SetDataCompatibilityLevel(CompatibilityLevel.Version_170)
           .UseSimpleAssemblyNameTypeSerializer()
           .UseDefaultTypeSerializer()
           .UseMemoryStorage());
-           
+
 
             services.AddDbContext<Gambling_AppContext>(options => options.UseSqlServer(Configuration.GetConnectionString("DefaultConnection")));
+            if (!_env.IsDevelopment())
+            {
+                services.AddHttpsRedirection(options =>
+                {
+                    options.RedirectStatusCode = StatusCodes.Status308PermanentRedirect;
+                    options.HttpsPort = 443;
+                });
+            }
+          
 
         }
 
@@ -49,9 +60,17 @@ namespace AAA_API
             {
                 app.UseDeveloperExceptionPage();
             }
+          //  else
+          ///  {
+                //app.UseExceptionHandler("/Error");
+                // The default HSTS value is 30 days. You may want to change this for production scenarios, see https://aka.ms/aspnetcore-hsts.
+              //  app.UseHsts();
+          //  }
+
+          
+
 
             app.UseHttpsRedirection();
-
             app.UseRouting();
 
             app.UseAuthorization();
