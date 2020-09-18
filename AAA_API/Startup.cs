@@ -28,7 +28,7 @@ namespace AAA_API
         public IConfiguration Configuration { get; }
 
         // This method gets called by the runtime. Use this method to add services to the container.
-        public void ConfigureServices(IServiceCollection services, IWebHostEnvironment _env)
+        public void ConfigureServices(IServiceCollection services)
         {
           
             services.AddControllers();
@@ -40,15 +40,22 @@ namespace AAA_API
 
 
             services.AddDbContext<Gambling_AppContext>(options => options.UseSqlServer(Configuration.GetConnectionString("DefaultConnection")));
-            if (!_env.IsDevelopment())
+       
+            services.AddHsts(options =>
             {
-                services.AddHttpsRedirection(options =>
-                {
-                    options.RedirectStatusCode = StatusCodes.Status308PermanentRedirect;
-                    options.HttpsPort = 443;
-                });
-            }
-          
+                options.Preload = true;
+                options.IncludeSubDomains = true;
+                options.MaxAge = TimeSpan.FromDays(60);
+                options.ExcludedHosts.Add("example.com");
+                options.ExcludedHosts.Add("www.example.com");
+            });
+
+            services.AddHttpsRedirection(options =>
+            {
+                options.RedirectStatusCode = StatusCodes.Status307TemporaryRedirect;
+                options.HttpsPort = 5001;
+            });
+
 
         }
 
@@ -60,12 +67,12 @@ namespace AAA_API
             {
                 app.UseDeveloperExceptionPage();
             }
-          //  else
-          ///  {
-                //app.UseExceptionHandler("/Error");
+            else
+           {
+                app.UseExceptionHandler("/Error");
                 // The default HSTS value is 30 days. You may want to change this for production scenarios, see https://aka.ms/aspnetcore-hsts.
-              //  app.UseHsts();
-          //  }
+                app.UseHsts();
+            }
 
           
 
