@@ -1,20 +1,14 @@
 using System;
-using System.Collections.Generic;
-using System.Linq;
-using System.Threading.Tasks;
+using System.Text;
 using AAA_API.Models;
-using Hangfire;
-using Hangfire.MemoryStorage;
+using Microsoft.AspNetCore.Authentication.JwtBearer;
 using Microsoft.AspNetCore.Builder;
 using Microsoft.AspNetCore.Hosting;
-using Microsoft.AspNetCore.Http;
-using Microsoft.AspNetCore.HttpsPolicy;
-using Microsoft.AspNetCore.Mvc;
 using Microsoft.EntityFrameworkCore;
 using Microsoft.Extensions.Configuration;
 using Microsoft.Extensions.DependencyInjection;
 using Microsoft.Extensions.Hosting;
-using Microsoft.Extensions.Logging;
+using Microsoft.IdentityModel.Tokens;
 
 namespace AAA_API
 {
@@ -30,32 +24,32 @@ namespace AAA_API
         // This method gets called by the runtime. Use this method to add services to the container.
         public void ConfigureServices(IServiceCollection services)
         {
-          
-            services.AddControllers();
-            services.AddHangfire(Config =>
-          Config.SetDataCompatibilityLevel(CompatibilityLevel.Version_170)
-          .UseSimpleAssemblyNameTypeSerializer()
-          .UseDefaultTypeSerializer()
-          .UseMemoryStorage());
-
-
+             services.AddControllers();
+            services.AddAuthentication(JwtBearerDefaults.AuthenticationScheme)
+            .AddJwtBearer(options =>
+            {
+               options.RequireHttpsMetadata = false;
+               options.SaveToken = true;
+               options.TokenValidationParameters = new TokenValidationParameters
+               {
+                   ValidateIssuer = true,
+                   ValidateAudience = true,
+                   ValidateLifetime = true,
+                   ValidateIssuerSigningKey = true,
+                   ValidIssuer = Configuration["Jwt:Issuer"],
+                   ValidAudience = Configuration["Jwt:Audience"],
+                   IssuerSigningKey = new SymmetricSecurityKey(Encoding.UTF8.GetBytes(Configuration["Jwt:SecretKey"])),
+                   ClockSkew = TimeSpan.Zero
+               };
+           });
             services.AddDbContext<Gambling_AppContext>(options => options.UseSqlServer(Configuration.GetConnectionString("DefaultConnection")));
-       
-           // services.AddHsts(options =>
-           // {
-             //   options.Preload = true;
-             ////   options.IncludeSubDomains = true;
-               // options.MaxAge = TimeSpan.FromDays(60);
-               // options.ExcludedHosts.Add("example.com");
-               // options.ExcludedHosts.Add("www.example.com");
-          //  });
 
-         //   services.AddHttpsRedirection(options =>
-          //  {
-           //     options.RedirectStatusCode = StatusCodes.Status307TemporaryRedirect;
-            //    options.HttpsPort = 5001;
-            //});
-
+          services.AddAuthorization(config =>
+            {
+             config.AddPolicy(Policies.Admin, Policies.AdminPolicy());
+             config.AddPolicy(Policies.User, Policies.UserPolicy());
+          });
+        
 
         }
 
@@ -67,26 +61,25 @@ namespace AAA_API
             {
                 app.UseDeveloperExceptionPage();
             }
-         //   else
-         //  {
-           //     app.UseExceptionHandler("/Error");
-          //      // The default HSTS value is 30 days. You may want to change this for production scenarios, see https://aka.ms/aspnetcore-hsts.
+            //   else
+            //  {
+            //     app.UseExceptionHandler("/Error");
+            //      // The default HSTS value is 30 days. You may want to change this for production scenarios, see https://aka.ms/aspnetcore-hsts.
             //    app.UseHsts();
-           // }
-
-          
+            // }
 
 
-           // app.UseHttpsRedirection();
+
+
+            // app.UseHttpsRedirection();
             app.UseRouting();
-
+            app.UseAuthentication();
             app.UseAuthorization();
-
             app.UseEndpoints(endpoints =>
             {
                 endpoints.MapControllers();
             });
-            
+
         }
     }
 }

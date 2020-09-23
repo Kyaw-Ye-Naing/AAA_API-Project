@@ -1,23 +1,20 @@
 {
   "format": 1,
   "restore": {
-    "C:\\Users\\Lenovo\\Desktop\\api\\AAA_API-Project\\AAA_API\\AAA_API.csproj": {}
+    "C:\\Users\\Kumo\\Desktop\\token\\AAA_API-Project\\AAA_API\\AAA_API.csproj": {}
   },
   "projects": {
-    "C:\\Users\\Lenovo\\Desktop\\api\\AAA_API-Project\\AAA_API\\AAA_API.csproj": {
+    "C:\\Users\\Kumo\\Desktop\\token\\AAA_API-Project\\AAA_API\\AAA_API.csproj": {
       "version": "1.0.0",
       "restore": {
-        "projectUniqueName": "C:\\Users\\Lenovo\\Desktop\\api\\AAA_API-Project\\AAA_API\\AAA_API.csproj",
+        "projectUniqueName": "C:\\Users\\Kumo\\Desktop\\token\\AAA_API-Project\\AAA_API\\AAA_API.csproj",
         "projectName": "AAA_API",
-        "projectPath": "C:\\Users\\Lenovo\\Desktop\\api\\AAA_API-Project\\AAA_API\\AAA_API.csproj",
-        "packagesPath": "C:\\Users\\Lenovo\\.nuget\\packages\\",
-        "outputPath": "C:\\Users\\Lenovo\\Desktop\\api\\AAA_API-Project\\AAA_API\\obj\\",
+        "projectPath": "C:\\Users\\Kumo\\Desktop\\token\\AAA_API-Project\\AAA_API\\AAA_API.csproj",
+        "packagesPath": "C:\\Users\\Kumo\\.nuget\\packages\\",
+        "outputPath": "C:\\Users\\Kumo\\Desktop\\token\\AAA_API-Project\\AAA_API\\obj\\",
         "projectStyle": "PackageReference",
-        "fallbackFolders": [
-          "C:\\Program Files\\dotnet\\sdk\\NuGetFallbackFolder"
-        ],
         "configFilePaths": [
-          "C:\\Users\\Lenovo\\AppData\\Roaming\\NuGet\\NuGet.Config",
+          "C:\\Users\\Kumo\\AppData\\Roaming\\NuGet\\NuGet.Config",
           "C:\\Program Files (x86)\\NuGet\\Config\\Microsoft.VisualStudio.Offline.config"
         ],
         "originalTargetFrameworks": [
@@ -52,6 +49,10 @@
             "Hangfire.MemoryStorage.Core": {
               "target": "Package",
               "version": "[1.4.0, )"
+            },
+            "Microsoft.AspNetCore.Authentication.JwtBearer": {
+              "target": "Package",
+              "version": "[3.1.8, )"
             },
             "Microsoft.EntityFrameworkCore": {
               "target": "Package",

@@ -26,15 +26,3 @@ namespace AAA_API
                });
     }
 }
-//WebHost.CreateDefaultBuilder(args)
-              // .UseKestrel()
-             //  .UseContentRoot(Directory.GetCurrentDirectory())
-             //  .UseUrls("http://*:5001")
-             //  .UseStartup<Startup>()
-             //  .Build();
-
-//Host.CreateDefaultBuilder(args)
-              // .ConfigureWebHostDefaults(webBuilder =>
-              // {
-                //   webBuilder.UseStartup<Startup>();
-             //  });
