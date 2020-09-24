@@ -74,15 +74,19 @@ namespace AAA_API.Controllers
         }
 
         // POST: api/TblRoles
-        // To protect from overposting attacks, enable the specific properties you want to bind to, for
-        // more details, see https://go.microsoft.com/fwlink/?linkid=2123754.
         [HttpPost]
         public async Task<ActionResult<TblRole>> PostTblRole(TblRole tblRole)
         {
-            _context.TblRole.Add(tblRole);
+            TblRole role = new TblRole()
+            {
+                Role = tblRole.Role,
+                Active = true
+
+            };
+            _context.TblRole.Add(role);
             await _context.SaveChangesAsync();
 
-            return CreatedAtAction("GetTblRole", new { id = tblRole.RoleId }, tblRole);
+            return CreatedAtAction("GetTblRole", new { id = role.RoleId }, role);
         }
 
         // DELETE: api/TblRoles/5

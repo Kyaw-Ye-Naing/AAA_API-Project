@@ -1,11 +1,11 @@
-﻿using System;
-using System.Collections.Generic;
+﻿using System.Collections.Generic;
 using System.Linq;
 using System.Threading.Tasks;
-using Microsoft.AspNetCore.Http;
 using Microsoft.AspNetCore.Mvc;
 using Microsoft.EntityFrameworkCore;
 using AAA_API.Models;
+using System;
+using Microsoft.AspNetCore.Authorization;
 
 namespace AAA_API.Controllers
 {
@@ -42,8 +42,6 @@ namespace AAA_API.Controllers
         }
 
         // PUT: api/TblUsers/5
-        // To protect from overposting attacks, enable the specific properties you want to bind to, for
-        // more details, see https://go.microsoft.com/fwlink/?linkid=2123754.
         [HttpPut("{id}")]
         public async Task<IActionResult> PutTblUser(decimal id, TblUser tblUser)
         {
@@ -74,15 +72,40 @@ namespace AAA_API.Controllers
         }
 
         // POST: api/TblUsers
-        // To protect from overposting attacks, enable the specific properties you want to bind to, for
-        // more details, see https://go.microsoft.com/fwlink/?linkid=2123754.
         [HttpPost]
+        [Authorize(Policy = Policies.Admin)]
         public async Task<ActionResult<TblUser>> PostTblUser(TblUser tblUser)
         {
-            _context.TblUser.Add(tblUser);
+            var user_id = User.FindFirst("userId")?.Value;
+            TblUser user = new TblUser()
+            {
+                Username = tblUser.Username,
+                Password = tblUser.Password,
+                Lock = false,
+                RoleId = tblUser.RoleId,
+                Mobile = tblUser.Mobile,
+                SharePercent = tblUser.SharePercent,
+                BetLimitForMix = tblUser.BetLimitForMix,
+                BetLimitForSingle = tblUser.BetLimitForSingle,
+                SingleBetCommission5 = tblUser.SingleBetCommission5,
+                SingleBetCommission8 = tblUser.SingleBetCommission8,
+                MixBetCommission2count15 = tblUser.MixBetCommission2count15,
+                MixBetCommission3count20 = tblUser.MixBetCommission3count20,
+                MixBetCommission4count20 = tblUser.MixBetCommission4count20,
+                MixBetCommission5count20 = tblUser.MixBetCommission5count20,
+                MixBetCommission6count20 = tblUser.MixBetCommission6count20,
+                MixBetCommission7count20 = tblUser.MixBetCommission7count20,
+                MixBetCommission8count20 = tblUser.MixBetCommission8count20,
+                MixBetCommission9count25 = tblUser.MixBetCommission9count25,
+                MixBetCommission10count25 = tblUser.MixBetCommission10count25,
+                MixBetCommission11count25 = tblUser.MixBetCommission11count25,
+                CreatedBy = Decimal.Parse(user_id),
+                CreatedDate = DateTime.Now
+            };
+            _context.TblUser.Add(user);
             await _context.SaveChangesAsync();
 
-            return CreatedAtAction("GetTblUser", new { id = tblUser.UserId }, tblUser);
+            return CreatedAtAction("GetTblUser", new { id = user.UserId }, user);
         }
 
         // DELETE: api/TblUsers/5

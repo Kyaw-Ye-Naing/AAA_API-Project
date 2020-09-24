@@ -57,7 +57,7 @@ namespace AAA_API.Controllers
 
             //Check logged user account is locked
             var Userlock = _context.TblUser.Where(a => a.Username.Equals(login.username)).FirstOrDefault().Lock;
-            if (Userlock == false)
+            if (Userlock == true)
             {
                 return BadRequest(new { message = "Your account is lock!" });
             }
@@ -91,6 +91,7 @@ namespace AAA_API.Controllers
             var claims = new[]
             {
                   // new Claim(JwtRegisteredClaimNames.Sub, userInfo.Username),
+                  new Claim("userId",userInfo.UserId.ToString()),
                    new Claim("name",userInfo.Username),
                     new Claim("Pwd", userInfo.Password.ToString()),
                     new Claim("role",role),
