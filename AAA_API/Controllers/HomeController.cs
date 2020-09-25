@@ -9,6 +9,7 @@ using System.IdentityModel.Tokens.Jwt;
 using System.Security.Claims;
 using Microsoft.IdentityModel.Tokens;
 using System.Text;
+using Microsoft.VisualStudio.Web.CodeGeneration.Contracts.Messaging;
 
 namespace AAA_API.Controllers
 {
@@ -29,7 +30,7 @@ namespace AAA_API.Controllers
 
         [HttpGet]
         [Route("home")]
-        [Authorize(Policy = Policies.User)] 
+        [Authorize(Policy = Policies.User)]
         public IActionResult Index()
         {
             //For bro aung kyaw nyunt
@@ -39,8 +40,8 @@ namespace AAA_API.Controllers
             return Ok("This is a response from Admin method");
         }
 
-       //Login 
-         [HttpPost]
+        //Login 
+        [HttpPost]
         [Route("authenicate")]
         [AllowAnonymous]
         public IActionResult Login([FromBody] AuthenicateModel login)
@@ -50,7 +51,7 @@ namespace AAA_API.Controllers
             //Check username and password are empty
             if (string.IsNullOrEmpty(login.username) || string.IsNullOrEmpty(login.password))
             {
-                return BadRequest(new {message= "Usename or password is empty" });
+                return BadRequest(new { message = "Usename or password is empty" });
             }
 
             TblUser user = AuthenticateUser(login);
@@ -106,9 +107,85 @@ namespace AAA_API.Controllers
             );
             return new JwtSecurityTokenHandler().WriteToken(token);
         }
+
+        //Account lock 
+        // PUT: api/TblUsers/5
+        [HttpPut("{id}")]
+        public IActionResult Lock(decimal id)
+        {
+            TblUser tblUser = _context.TblUser.Find(id);
+            tblUser.Username = tblUser.Username;
+            tblUser.Password = tblUser.Password;
+            tblUser.Lock = true;
+            tblUser.RoleId = tblUser.RoleId;
+            tblUser.Mobile = tblUser.Mobile;
+            tblUser.SharePercent = tblUser.SharePercent;
+            tblUser.BetLimitForMix = tblUser.BetLimitForMix;
+            tblUser.BetLimitForSingle = tblUser.BetLimitForSingle;
+            tblUser.SingleBetCommission5 = tblUser.SingleBetCommission5;
+            tblUser.SingleBetCommission8 = tblUser.SingleBetCommission8;
+            tblUser.MixBetCommission2count15 = tblUser.MixBetCommission2count15;
+            tblUser.MixBetCommission3count20 = tblUser.MixBetCommission3count20;
+            tblUser.MixBetCommission4count20 = tblUser.MixBetCommission4count20;
+            tblUser.MixBetCommission5count20 = tblUser.MixBetCommission5count20;
+            tblUser.MixBetCommission6count20 = tblUser.MixBetCommission6count20;
+            tblUser.MixBetCommission7count20 = tblUser.MixBetCommission7count20;
+            tblUser.MixBetCommission8count20 = tblUser.MixBetCommission8count20;
+            tblUser.MixBetCommission9count25 = tblUser.MixBetCommission9count25;
+            tblUser.MixBetCommission10count25 = tblUser.MixBetCommission10count25;
+            tblUser.MixBetCommission11count25 = tblUser.MixBetCommission11count25;
+            tblUser.CreatedBy = tblUser.CreatedBy;
+            tblUser.CreatedDate = tblUser.CreatedDate;
+            _context.SaveChanges();
+
+            return Ok(new { Message = "Successfully locked" });
+        }
+
+        //Reset Password
+        [HttpPost]
+        [Route("change")]
+        public IActionResult RestPassword(ChangePassword change)
+        {
+            if (string.IsNullOrEmpty(change.newPassword) || string.IsNullOrEmpty(change.oldPassword))
+            {
+                return BadRequest(new { message = "Password is empty" });
+            }
+            else
+            {
+                var value = _context.TblUser.ToList().Any(a => a.Password.Equals(change.oldPassword));
+                if (value == true)
+                {
+                    var userId = _context.TblUser.Where(a => a.Password.Equals(change.oldPassword)).First().UserId;
+                    TblUser user = _context.TblUser.Find(userId);
+                    user.Username = user.Username;
+                    user.Password = change.newPassword;
+                    user.Lock = user.Lock;
+                    user.RoleId = user.RoleId;
+                    user.Mobile = user.Mobile;
+                    user.BetLimitForMix = user.BetLimitForMix;
+                    user.BetLimitForSingle = user.BetLimitForSingle;
+                    user.SingleBetCommission5 = user.SingleBetCommission5;
+                    user.SingleBetCommission8 = user.SingleBetCommission8;
+                    user.MixBetCommission2count15 = user.MixBetCommission2count15;
+                    user.MixBetCommission3count20 = user.MixBetCommission3count20;
+                    user.MixBetCommission4count20 = user.MixBetCommission4count20;
+                    user.MixBetCommission5count20 = user.MixBetCommission5count20;
+                    user.MixBetCommission6count20 = user.MixBetCommission6count20;
+                    user.MixBetCommission7count20 = user.MixBetCommission7count20;
+                    user.MixBetCommission8count20 = user.MixBetCommission8count20;
+                    user.MixBetCommission9count25 = user.MixBetCommission9count25;
+                    user.MixBetCommission10count25 = user.MixBetCommission10count25;
+                    user.MixBetCommission11count25 = user.MixBetCommission11count25;
+                    user.CreatedBy = user.CreatedBy;
+                    user.CreatedDate = user.CreatedDate;
+                    _context.SaveChanges();
+                    return Ok(new { Message = "Successfully Changed" });
+                }
+                return BadRequest(new { Message = "Password is incorrect" });
+            }
+        }
     }
-}   
-       
-       
-        
- 
+}
+
+
+

@@ -29,78 +29,37 @@ namespace AAA_API.Controllers
             return await _context.TblLeague.ToListAsync();
         }
 
-        // GET: api/TblConfirmLeagues
-      
-
-        // GET: api/TblLeagues/5
-        [HttpGet("{id}")]
-        public async Task<ActionResult<TblLeague>> GetTblLeague(decimal id)
-        {
-            var tblLeague = await _context.TblLeague.FindAsync(id);
-
-            if (tblLeague == null)
-            {
-                return NotFound();
-            }
-
-            return tblLeague;
-        }
-
         // PUT: api/TblLeagues/5
-        // To protect from overposting attacks, enable the specific properties you want to bind to, for
         [HttpPut("{id}")]
-        public async Task<IActionResult> PutTblLeague(decimal id, TblLeague tblLeague)
+        public IActionResult PutTblLeague(decimal id)
         {
-            if (id != tblLeague.LeagueId)
+            TblLeague league = _context.TblLeague.Find(id);
+            if (TblConfirmLeagueExists(league.LeagueId))
             {
-                return BadRequest();
+                return BadRequest(new { Message = "Selected league is already exist" });
             }
-
-            _context.Entry(tblLeague).State = EntityState.Modified;
-
-            try
-            {
-                await _context.SaveChangesAsync();
-            }
-            catch (DbUpdateConcurrencyException)
-            {
-                if (!TblLeagueExists(id))
-                {
-                    return NotFound();
-                }
-                else
-                {
-                    throw;
-                }
-            }
-
-            return Ok(new { status = "Successfully Updated" });
-        }
-
-        // POST: api/TblLeagues
-        // To protect from overposting attacks, enable the specific properties you want to bind to, for
-       
-        [HttpPost]
-        public IActionResult PostTblLeague(TblLeague lg)
-        {
-            //TblLeague league = _context.TblLeague.Find(lg.id);
             TblConfirmLeague confirmLeague = new TblConfirmLeague()
             {
-                LeagueId = lg.LeagueId,
-                RapidLeagueId = lg.RapidLeagueId,
+                LeagueId = league.LeagueId,
+                RapidLeagueId = league.RapidLeagueId,
                 Active = true
-
             };
             _context.TblConfirmLeague.Add(confirmLeague);
             _context.SaveChangesAsync();
             return Ok(new { status = "Successfully Inserted" });
-          // return CreatedAtAction("GetTblConfirmLeague", new { id = tblLeague.LeagueId }, tblLeague);
+            // return CreatedAtAction("GetTblConfirmLeague", new { id = tblLeague.LeagueId }, tblLeague);
         }
 
-        //Check id exists
+        //Check id exists in league table
         private bool TblLeagueExists(decimal id)
         {
             return _context.TblLeague.Any(e => e.LeagueId == id);
+        }
+
+        //Check id exists in Confirm league table
+        private bool TblConfirmLeagueExists(decimal id)
+        {
+            return _context.TblConfirmLeague.Any(e => e.LeagueId== id);
         }
     }
 }
