@@ -6,11 +6,13 @@ using Microsoft.AspNetCore.Http;
 using Microsoft.AspNetCore.Mvc;
 using Microsoft.EntityFrameworkCore;
 using AAA_API.Models;
+using Microsoft.AspNetCore.Authorization;
 
 namespace AAA_API.Controllers
 {
     [Route("api/[controller]")]
     [ApiController]
+    [Authorize(Policy = "Admin")]
     public class TblRolesController : ControllerBase
     {
         private readonly Gambling_AppContext _context;

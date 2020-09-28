@@ -22,6 +22,7 @@ namespace AAA_API.Controllers
 
         // GET: api/TblUsers
         [HttpGet]
+        [Authorize(Policy = "Person")]
         public async Task<ActionResult<IEnumerable<TblUser>>> GetTblUser()
         {
             return await _context.TblUser.ToListAsync();
@@ -29,6 +30,7 @@ namespace AAA_API.Controllers
 
         // GET: api/TblUsers/5
         [HttpGet("{id}")]
+        [Authorize(Policy = "Person")]
         public async Task<ActionResult<TblUser>> GetTblUser(decimal id)
         {
             var tblUser = await _context.TblUser.FindAsync(id);
@@ -43,6 +45,7 @@ namespace AAA_API.Controllers
 
         // PUT: api/TblUsers/edit/5
         [HttpPut("{id}")]
+        [Authorize(Policy = "Person")]
         public async Task<IActionResult> PutTblUser(decimal id, TblUser tblUser)
         {
             if (id != tblUser.UserId)
@@ -73,7 +76,7 @@ namespace AAA_API.Controllers
 
         // POST: api/TblUsers
         [HttpPost]
-        [Authorize(Policy = Policies.Admin)]
+        [Authorize(Policy = "Person")]
         public async Task<ActionResult<TblUser>> PostTblUser(TblUser tblUser)
         {
             var user_id = User.FindFirst("userId")?.Value;
@@ -110,6 +113,7 @@ namespace AAA_API.Controllers
 
         // DELETE: api/TblUsers/5
         [HttpDelete("{id}")]
+        [Authorize(Policy = "Person")]
         public async Task<ActionResult<TblUser>> DeleteTblUser(decimal id)
         {
             var tblUser = await _context.TblUser.FindAsync(id);

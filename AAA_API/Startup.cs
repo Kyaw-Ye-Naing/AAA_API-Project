@@ -54,6 +54,7 @@ namespace AAA_API
             {
                 options.AddPolicy("Person", policy => policy.RequireRole("Admin", "Master","SemiMaster"));
                 options.AddPolicy("EndUser", policy => policy.RequireRole("User"));
+                options.AddPolicy("Admin", policy => policy.RequireRole("Admin"));
             });
 
 

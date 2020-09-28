@@ -40,18 +40,6 @@ namespace AAA_API.Controllers
             return Ok("This is a response from Person method");
         }
 
-        [HttpGet]
-        [Route("home1")]
-        [Authorize(Policy = "User")]
-        public IActionResult Index1()
-        {
-            //For bro aung kyaw nyunt
-            //Enable to initialize as a public variable but it can call within classes as shown below
-            var connString = _configuartion.GetConnectionString("DefaultConnection");
-            //  return _context.TblLeague.ToList();
-            return Ok("This is a response from User method");
-        }
-
         //Login 
         [HttpPost]
         [Route("authenicate")]
@@ -123,6 +111,7 @@ namespace AAA_API.Controllers
         //Account lock 
         // PUT: api/Home/5
         [HttpPut("lock/{id}")]
+        [Authorize(Policy = "Person")]
         public IActionResult Lock(decimal id)
         {
             TblUser tblUser = _context.TblUser.Find(id);
@@ -156,6 +145,7 @@ namespace AAA_API.Controllers
         //Reset Password
         [HttpPost]
         [Route("reset")]
+        [Authorize(Policy = "Person")]
         public IActionResult RestPassword(ResetPassword reset)
         {
             if (string.IsNullOrEmpty(reset.NewPassword) || string.IsNullOrEmpty(reset.OldPassword))

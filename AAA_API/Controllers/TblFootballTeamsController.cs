@@ -4,11 +4,13 @@ using System.Threading.Tasks;
 using Microsoft.AspNetCore.Mvc;
 using Microsoft.EntityFrameworkCore;
 using AAA_API.Models;
+using Microsoft.AspNetCore.Authorization;
 
 namespace AAA_API.Controllers
 {
     [Route("api/[controller]")]
     [ApiController]
+    [Authorize(Policy = "Admin")]
     public class TblFootballTeamsController : ControllerBase
     {
         private readonly Gambling_AppContext _context;
