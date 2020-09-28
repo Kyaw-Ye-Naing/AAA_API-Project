@@ -5,11 +5,9 @@ using System.Threading.Tasks;
 
 namespace AAA_API.Models
 {
-    public class ChangePassword
+    public class ResetPassword
     {
-        public string CurrentPassword { get; set; }
+        public string OldPassword { get; set; }
         public string NewPassword { get; set; }
-
-        public string ConfirmPassword { get; set; }
     }
 }

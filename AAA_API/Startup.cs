@@ -44,12 +44,18 @@ namespace AAA_API
            });
             services.AddDbContext<Gambling_AppContext>(options => options.UseSqlServer(Configuration.GetConnectionString("DefaultConnection")));
 
-          services.AddAuthorization(config =>
+            // services.AddAuthorization(config =>
+            //   {
+            //    config.AddPolicy(Policies.Admin, Policies.AdminPolicy());
+            //   config.AddPolicy(Policies.User, Policies.UserPolicy());
+            // });
+
+            services.AddAuthorization(options =>
             {
-             config.AddPolicy(Policies.Admin, Policies.AdminPolicy());
-             config.AddPolicy(Policies.User, Policies.UserPolicy());
-          });
-        
+                options.AddPolicy("Person", policy => policy.RequireRole("Admin", "Master","SemiMaster"));
+                options.AddPolicy("EndUser", policy => policy.RequireRole("User"));
+            });
+
 
         }
 

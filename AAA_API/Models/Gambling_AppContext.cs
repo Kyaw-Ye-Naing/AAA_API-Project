@@ -31,13 +31,14 @@ namespace AAA_API.Models
         public virtual DbSet<TblUser> TblUser { get; set; }
         public virtual DbSet<TblUserBalance> TblUserBalance { get; set; }
         public virtual DbSet<TblUserPosting> TblUserPosting { get; set; }
-        public virtual DbSet<ViewUpcomingEventDetails> ViewUpcomingEventDetails { get; set; }
+        public virtual DbSet<ViewUserBalance> ViewUserBalance { get; set; }
 
         protected override void OnConfiguring(DbContextOptionsBuilder optionsBuilder)
         {
             if (!optionsBuilder.IsConfigured)
             {
-                optionsBuilder.UseSqlServer("Data Source=172.105.121.13;Initial Catalog=Gambling_App;user id=sa;password=209851@ung");
+#warning To protect potentially sensitive information in your connection string, you should move it out of source code. See http://go.microsoft.com/fwlink/?LinkId=723263 for guidance on storing connection strings.
+                optionsBuilder.UseSqlServer("Data Source=172.104.40.242;Initial Catalog=Gambling_App;user id=sa;password=209851@ung");
             }
         }
 
@@ -280,7 +281,7 @@ namespace AAA_API.Models
 
                 entity.Property(e => e.AwayHandicap)
                     .HasColumnName("awayHandicap")
-                    .HasColumnType("decimal(18, 2)");
+                    .HasMaxLength(50);
 
                 entity.Property(e => e.AwayOdd)
                     .HasColumnName("awayOdd")
@@ -292,7 +293,7 @@ namespace AAA_API.Models
 
                 entity.Property(e => e.HomeHandicap)
                     .HasColumnName("homeHandicap")
-                    .HasColumnType("decimal(18, 2)");
+                    .HasMaxLength(50);
 
                 entity.Property(e => e.HomeOdd)
                     .HasColumnName("homeOdd")
@@ -536,6 +537,10 @@ namespace AAA_API.Models
                     .HasColumnType("decimal(18, 0)")
                     .ValueGeneratedOnAdd();
 
+                entity.Property(e => e.CreatedDate)
+                    .HasColumnName("createdDate")
+                    .HasColumnType("date");
+
                 entity.Property(e => e.Inward).HasColumnName("inward");
 
                 entity.Property(e => e.Outward).HasColumnName("outward");
@@ -585,88 +590,20 @@ namespace AAA_API.Models
                     .HasColumnType("decimal(18, 0)");
             });
 
-            modelBuilder.Entity<ViewUpcomingEventDetails>(entity =>
+            modelBuilder.Entity<ViewUserBalance>(entity =>
             {
                 entity.HasNoKey();
 
-                entity.ToView("View_UpcomingEventDetails");
+                entity.ToView("ViewUserBalance");
 
-                entity.Property(e => e.Active).HasColumnName("active");
+                entity.Property(e => e.Balance).HasColumnType("decimal(38, 2)");
 
-                entity.Property(e => e.AwayFootballTeam)
-                    .HasColumnName("awayFootballTeam")
-                    .HasMaxLength(50);
+                entity.Property(e => e.Inward).HasColumnType("decimal(38, 2)");
 
-                entity.Property(e => e.AwayFootballTeamMyan)
-                    .HasColumnName("awayFootballTeamMyan")
-                    .HasMaxLength(50);
+                entity.Property(e => e.Outward).HasColumnType("decimal(38, 2)");
 
-                entity.Property(e => e.AwayHandicap)
-                    .HasColumnName("awayHandicap")
-                    .HasColumnType("decimal(18, 2)");
-
-                entity.Property(e => e.AwayOdd)
-                    .HasColumnName("awayOdd")
-                    .HasColumnType("decimal(18, 2)");
-
-                entity.Property(e => e.AwayRapidTeamId)
-                    .HasColumnName("awayRapidTeamId")
-                    .HasColumnType("decimal(18, 0)");
-
-                entity.Property(e => e.AwayTeamId)
-                    .HasColumnName("awayTeamId")
-                    .HasColumnType("decimal(18, 0)");
-
-                entity.Property(e => e.EventDate)
-                    .HasColumnName("eventDate")
-                    .HasColumnType("date");
-
-                entity.Property(e => e.EventTime)
-                    .HasColumnName("eventTime")
-                    .HasColumnType("datetime");
-
-                entity.Property(e => e.HomeFootballTeam)
-                    .HasColumnName("homeFootballTeam")
-                    .HasMaxLength(50);
-
-                entity.Property(e => e.HomeFootballTeamMyan)
-                    .HasColumnName("homeFootballTeamMyan")
-                    .HasMaxLength(50);
-
-                entity.Property(e => e.HomeHandicap)
-                    .HasColumnName("homeHandicap")
-                    .HasColumnType("decimal(18, 2)");
-
-                entity.Property(e => e.HomeOdd)
-                    .HasColumnName("homeOdd")
-                    .HasColumnType("decimal(18, 2)");
-
-                entity.Property(e => e.HomeRapidTeamId)
-                    .HasColumnName("homeRapidTeamId")
-                    .HasColumnType("decimal(18, 0)");
-
-                entity.Property(e => e.HomeTeamId)
-                    .HasColumnName("homeTeamId")
-                    .HasColumnType("decimal(18, 0)");
-
-                entity.Property(e => e.LeagueId)
-                    .HasColumnName("leagueId")
-                    .HasColumnType("decimal(18, 0)");
-
-                entity.Property(e => e.LeagueName)
-                    .HasColumnName("leagueName")
-                    .HasMaxLength(50);
-
-                entity.Property(e => e.RapidLeagueId)
-                    .HasColumnName("rapidLeagueId")
-                    .HasColumnType("decimal(18, 0)");
-
-                entity.Property(e => e.RapideventId)
-                    .HasColumnName("rapideventId")
-                    .HasColumnType("decimal(18, 0)");
-
-                entity.Property(e => e.UpcomingEventId)
-                    .HasColumnName("upcomingEventId")
+                entity.Property(e => e.UserId)
+                    .HasColumnName("userId")
                     .HasColumnType("decimal(18, 0)");
             });
 

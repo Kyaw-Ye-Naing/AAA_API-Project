@@ -9,7 +9,6 @@ using System.IdentityModel.Tokens.Jwt;
 using System.Security.Claims;
 using Microsoft.IdentityModel.Tokens;
 using System.Text;
-using Microsoft.VisualStudio.Web.CodeGeneration.Contracts.Messaging;
 
 namespace AAA_API.Controllers
 {
@@ -30,14 +29,27 @@ namespace AAA_API.Controllers
 
         [HttpGet]
         [Route("home")]
-        [Authorize(Policy = Policies.User)]
+        // [Authorize(Policy = Policies.User)]
+        [Authorize(Policy = "Person")]
         public IActionResult Index()
+        {
+            //For bro aung kyaw nyunt
+            //Cannot initialize as a public variable but it can call within classes as shown below
+            var connString = _configuartion.GetConnectionString("DefaultConnection");
+            //  return _context.TblLeague.ToList();
+            return Ok("This is a response from Person method");
+        }
+
+        [HttpGet]
+        [Route("home1")]
+        [Authorize(Policy = "User")]
+        public IActionResult Index1()
         {
             //For bro aung kyaw nyunt
             //Enable to initialize as a public variable but it can call within classes as shown below
             var connString = _configuartion.GetConnectionString("DefaultConnection");
             //  return _context.TblLeague.ToList();
-            return Ok("This is a response from Admin method");
+            return Ok("This is a response from User method");
         }
 
         //Login 
@@ -60,7 +72,7 @@ namespace AAA_API.Controllers
             var Userlock = _context.TblUser.Where(a => a.Username.Equals(login.username)).FirstOrDefault().Lock;
             if (Userlock == true)
             {
-                return BadRequest(new { message = "Your account is lock!" });
+                return BadRequest(new { message = "Your account is locked!" });
             }
 
             //return logged user information and token
@@ -109,8 +121,8 @@ namespace AAA_API.Controllers
         }
 
         //Account lock 
-        // PUT: api/TblUsers/5
-        [HttpPut("{id}")]
+        // PUT: api/Home/5
+        [HttpPut("lock/{id}")]
         public IActionResult Lock(decimal id)
         {
             TblUser tblUser = _context.TblUser.Find(id);
@@ -143,22 +155,22 @@ namespace AAA_API.Controllers
 
         //Reset Password
         [HttpPost]
-        [Route("change")]
-        public IActionResult RestPassword(ChangePassword change)
+        [Route("reset")]
+        public IActionResult RestPassword(ResetPassword reset)
         {
-            if (string.IsNullOrEmpty(change.newPassword) || string.IsNullOrEmpty(change.oldPassword))
+            if (string.IsNullOrEmpty(reset.NewPassword) || string.IsNullOrEmpty(reset.OldPassword))
             {
                 return BadRequest(new { message = "Password is empty" });
             }
             else
             {
-                var value = _context.TblUser.ToList().Any(a => a.Password.Equals(change.oldPassword));
+                var value = _context.TblUser.ToList().Any(a => a.Password.Equals(reset.OldPassword));
                 if (value == true)
                 {
-                    var userId = _context.TblUser.Where(a => a.Password.Equals(change.oldPassword)).First().UserId;
+                    var userId = _context.TblUser.Where(a => a.Password.Equals(reset.OldPassword)).First().UserId;
                     TblUser user = _context.TblUser.Find(userId);
                     user.Username = user.Username;
-                    user.Password = change.newPassword;
+                    user.Password = reset.NewPassword;
                     user.Lock = user.Lock;
                     user.RoleId = user.RoleId;
                     user.Mobile = user.Mobile;
@@ -184,8 +196,55 @@ namespace AAA_API.Controllers
                 return BadRequest(new { Message = "Password is incorrect" });
             }
         }
+
+        //Change Password 
+        [HttpPost]
+        [Route("change")]
+        public IActionResult ChangePassword(ChangePassword change)
+        {
+            if (string.IsNullOrEmpty(change.CurrentPassword) || string.IsNullOrEmpty(change.NewPassword) ||
+                string.IsNullOrEmpty(change.ConfirmPassword))
+            {
+                return BadRequest(new { message = "Password is empty" });
+            }
+            if (change.NewPassword.Equals(change.ConfirmPassword))
+            {
+                return BadRequest(new { message = "Password is empty" });
+            }
+            var value = _context.TblUser.ToList().Any(a => a.Password.Equals(change.CurrentPassword));
+            if (value == true)
+            {
+                var userId = _context.TblUser.Where(a => a.Password.Equals(change.CurrentPassword)).First().UserId;
+                TblUser user = _context.TblUser.Find(userId);
+                user.Username = user.Username;
+                user.Password = change.NewPassword;
+                user.Lock = user.Lock;
+                user.RoleId = user.RoleId;
+                user.Mobile = user.Mobile;
+                user.BetLimitForMix = user.BetLimitForMix;
+                user.BetLimitForSingle = user.BetLimitForSingle;
+                user.SingleBetCommission5 = user.SingleBetCommission5;
+                user.SingleBetCommission8 = user.SingleBetCommission8;
+                user.MixBetCommission2count15 = user.MixBetCommission2count15;
+                user.MixBetCommission3count20 = user.MixBetCommission3count20;
+                user.MixBetCommission4count20 = user.MixBetCommission4count20;
+                user.MixBetCommission5count20 = user.MixBetCommission5count20;
+                user.MixBetCommission6count20 = user.MixBetCommission6count20;
+                user.MixBetCommission7count20 = user.MixBetCommission7count20;
+                user.MixBetCommission8count20 = user.MixBetCommission8count20;
+                user.MixBetCommission9count25 = user.MixBetCommission9count25;
+                user.MixBetCommission10count25 = user.MixBetCommission10count25;
+                user.MixBetCommission11count25 = user.MixBetCommission11count25;
+                user.CreatedBy = user.CreatedBy;
+                user.CreatedDate = user.CreatedDate;
+                _context.SaveChanges();
+                return Ok(new { Message = "Successfully Changed" });
+            }
+            return BadRequest(new { Message = "Password is incorrect" });
+        }
     }
 }
+
 
 
 

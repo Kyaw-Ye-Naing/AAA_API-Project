@@ -8,9 +8,9 @@ namespace AAA_API.Models
         public decimal HandicapId { get; set; }
         public decimal? RapidEventId { get; set; }
         public decimal? HomeOdd { get; set; }
-        public decimal? HomeHandicap { get; set; }
+        public string HomeHandicap { get; set; }
         public decimal? AwayOdd { get; set; }
-        public decimal? AwayHandicap { get; set; }
+        public string AwayHandicap { get; set; }
         public DateTime? EventDatetime { get; set; }
     }
 }
