@@ -24,14 +24,14 @@ namespace AAA_API.Controllers
             _configuartion = configuration;
         }
 
-        // GET: api/TblLeagues
+        // SHOWING LEAGUES : api/TblLeagues
         [HttpGet]
         public async Task<ActionResult<IEnumerable<TblLeague>>> GetTblLeague()
         {
             return await _context.TblLeague.ToListAsync();
         }
 
-        // PUT: api/TblLeagues/5
+        // INSERTING LEAGUES INTO CONFIRM LEAGUES : api/TblLeagues/5
         [HttpPut("{id}")]
         public IActionResult PutTblLeague(decimal id)
         {
@@ -52,13 +52,13 @@ namespace AAA_API.Controllers
             // return CreatedAtAction("GetTblConfirmLeague", new { id = tblLeague.LeagueId }, tblLeague);
         }
 
-        //Check id exists in league table
+        //Check Id exists in league table
         private bool TblLeagueExists(decimal id)
         {
             return _context.TblLeague.Any(e => e.LeagueId == id);
         }
 
-        //Check id exists in Confirm league table
+        //Check Id exists in Confirm league table
         private bool TblConfirmLeagueExists(decimal id)
         {
             return _context.TblConfirmLeague.Any(e => e.LeagueId== id);

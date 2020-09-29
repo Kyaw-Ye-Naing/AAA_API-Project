@@ -6,6 +6,7 @@ using Microsoft.EntityFrameworkCore;
 using AAA_API.Models;
 using System;
 using Microsoft.AspNetCore.Authorization;
+using Microsoft.AspNetCore.Identity;
 
 namespace AAA_API.Controllers
 {
@@ -20,7 +21,7 @@ namespace AAA_API.Controllers
             _context = context;
         }
 
-        // GET: api/TblUsers
+        // SHOWING USER LIST : api/TblUsers
         [HttpGet]
         [Authorize(Policy = "Person")]
         public async Task<ActionResult<IEnumerable<TblUser>>> GetTblUser()
@@ -28,7 +29,7 @@ namespace AAA_API.Controllers
             return await _context.TblUser.ToListAsync();
         }
 
-        // GET: api/TblUsers/5
+        // SHOWING USER DETAIL : api/TblUsers/5
         [HttpGet("{id}")]
         [Authorize(Policy = "Person")]
         public async Task<ActionResult<TblUser>> GetTblUser(decimal id)
@@ -43,7 +44,7 @@ namespace AAA_API.Controllers
             return tblUser;
         }
 
-        // PUT: api/TblUsers/edit/5
+        // EDITING USER : api/TblUsers/edit/5
         [HttpPut("{id}")]
         [Authorize(Policy = "Person")]
         public async Task<IActionResult> PutTblUser(decimal id, TblUser tblUser)
@@ -74,7 +75,7 @@ namespace AAA_API.Controllers
             return NoContent();
         }
 
-        // POST: api/TblUsers
+        // CREATING USER : api/TblUsers
         [HttpPost]
         [Authorize(Policy = "Person")]
         public async Task<ActionResult<TblUser>> PostTblUser(TblUser tblUser)
@@ -111,7 +112,7 @@ namespace AAA_API.Controllers
             return CreatedAtAction("GetTblUser", new { id = user.UserId }, user);
         }
 
-        // DELETE: api/TblUsers/5
+        // DELETING USER : api/TblUsers/5
         [HttpDelete("{id}")]
         [Authorize(Policy = "Person")]
         public async Task<ActionResult<TblUser>> DeleteTblUser(decimal id)
@@ -128,6 +129,7 @@ namespace AAA_API.Controllers
             return tblUser;
         }
 
+        // ADDING BALANCE : api/TblUsers/add/5
         [HttpPut("add/{id}")]
       [Authorize(Policy = "Person")]
         public IActionResult AddBalance(decimal id,[FromBody]Balance balance)
@@ -168,7 +170,7 @@ namespace AAA_API.Controllers
             //Current logged user's balance
             DateTime parent_moment =DateTime.Now;
             TblUserPosting parent_userPosting = new TblUserPosting();
-            var parent_role = _context.TblUser.Where(a => a.UserId == id).First().RoleId;
+            var parent_role = _context.TblUser.Where(a => a.UserId == Decimal.Parse(user_id)).First().RoleId;
             var parent_year = parent_moment.Year;
             var parent_month = parent_moment.Month;
             var parent_day = parent_moment.Day;
@@ -199,6 +201,7 @@ namespace AAA_API.Controllers
             return Ok(new { message = "Deposit Successfully" });
         }
 
+        // REMOVING BALANCE :  api/TblUsers/remove/5
         [HttpPut("remove/{id}")]
         [Authorize(Policy = "Person")]
         public IActionResult RemoveBalance(decimal id, [FromBody] Balance balance)
@@ -239,7 +242,7 @@ namespace AAA_API.Controllers
             //Current logged user's balance
             DateTime parent_moment =DateTime.Now;
             TblUserPosting parent_userPosting = new TblUserPosting();
-            var parent_role = _context.TblUser.Where(a => a.UserId == id).First().RoleId;
+            var parent_role = _context.TblUser.Where(a => a.UserId == Decimal.Parse(user_id)).First().RoleId;
             var parent_year = parent_moment.Year;
             var parent_month = parent_moment.Month;
             var parent_day = parent_moment.Day;
@@ -268,6 +271,100 @@ namespace AAA_API.Controllers
             _context.TblUserBalance.Add(parent_userBalance);
             _context.SaveChanges();
             return Ok(new { message = "Withdraw Successfully " });
+        }
+
+        // MANAGING CREDIT BALANCE :  api/TblUsers/credit/5
+        [HttpPut("credit/{id}")]
+        [Authorize(Policy ="Person")]
+        public IActionResult CreditManage(decimal id,Credit creditAmount)
+        {
+            //Created user's credit
+            var user_id = User.FindFirst("userId")?.Value;
+            TblCredit credit = new TblCredit();
+            DateTime moment = DateTime.Now;
+            var role = _context.TblUser.Where(a => a.UserId == id).First().RoleId;
+            var year = moment.Year;
+            var month = moment.Month;
+            var day = moment.Day;
+            var hour = moment.Hour;
+            var minute = moment.Minute;
+            var second = moment.Second;
+            var str = "CR" + id.ToString() + role.ToString()+ year.ToString() + month.ToString() + day.ToString() +
+                hour.ToString() + minute.ToString() + second.ToString();
+            credit.PostingNo = str;
+            credit.UserId = id;
+            credit.Amount = creditAmount.amount;
+            credit.Active = true;
+            credit.CreatedBy = Decimal.Parse(user_id);
+            credit.CreatedDate = DateTime.Now;
+            _context.TblCredit.Add(credit);
+            _context.SaveChanges();
+
+            //Current logged user's credit
+            TblCredit parent_credit = new TblCredit();
+            DateTime parent_moment = DateTime.Now;
+            var parent_role = _context.TblUser.Where(a => a.UserId == Decimal.Parse(user_id)).First().RoleId;
+            var parent_year = moment.Year;
+            var parent_month = moment.Month;
+            var parent_day = moment.Day;
+            var parent_hour = moment.Hour;
+            var parent_minute = moment.Minute;
+            var parent_second = moment.Second;
+            var parent_str = "CR" + user_id.ToString() + parent_role.ToString() + parent_year.ToString() + parent_month.ToString() + parent_day.ToString() +
+                parent_hour.ToString() + parent_minute.ToString() + parent_second.ToString();
+            parent_credit.PostingNo = parent_str;
+            parent_credit.UserId = Decimal.Parse(user_id);
+            parent_credit.Amount = creditAmount.amount;
+            parent_credit.Active = true;
+            parent_credit.CreatedBy = Decimal.Parse(user_id);
+            parent_credit.CreatedDate = DateTime.Now;
+            _context.TblCredit.Add(parent_credit);
+            _context.SaveChanges();
+
+            //Created user's credit
+            TblUserPosting posting = new TblUserPosting();
+            posting.PostingNo = str;
+            posting.UserId = id;
+            posting.Inward= creditAmount.amount;
+            posting.Outward = 0;
+            posting.Active = true;
+            posting.CreatedBy = Decimal.Parse(user_id);
+            posting.CreatedDate = DateTime.Now;
+            _context.TblUserPosting.Add(posting);
+            _context.SaveChanges();
+
+            //Current logged user's credit
+            TblUserPosting parent_posting = new TblUserPosting();
+            parent_posting.PostingNo = parent_str;
+            parent_posting.UserId = Decimal.Parse(user_id);
+            parent_posting.Inward = 0;
+            parent_posting.Outward = creditAmount.amount;
+            parent_posting.Active = true;
+            parent_posting.CreatedBy = Decimal.Parse(user_id);
+            parent_posting.CreatedDate = DateTime.Now;
+            _context.TblUserPosting.Add(parent_posting);
+            _context.SaveChanges();
+            return Ok();
+        }
+
+        [HttpGet]
+        [Route("list")]
+        [Authorize(Policy = "Person")]
+        public IActionResult UserList()
+        {
+            var user_id = User.FindFirst("userId")?.Value;
+            var id = _context.TblUser.Where(a => a.CreatedBy == Decimal.Parse(user_id)).First().UserId;
+            List<TblUserPosting> postings =_context.TblUserPosting.ToList();
+            List<ViewUserBalance> result = postings
+                 .GroupBy(l => l.UserId)
+                 .Select(cl => new ViewUserBalance
+                 {
+                     UserId =cl.First().UserId,
+                     Inward= cl.Sum(c =>c.Inward),
+                    Outward = cl.Sum(c =>c.Outward),
+                    Balance= cl.Sum(c => c.Inward) - cl.Sum(c => c.Outward),
+                 }).ToList();
+            return Ok(result.Where(a=>a.UserId==id).ToList());
         }
 
         private bool TblUserExists(decimal id)

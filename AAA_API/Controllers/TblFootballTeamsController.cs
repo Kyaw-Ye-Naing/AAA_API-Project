@@ -10,7 +10,6 @@ namespace AAA_API.Controllers
 {
     [Route("api/[controller]")]
     [ApiController]
-    [Authorize(Policy = "Admin")]
     public class TblFootballTeamsController : ControllerBase
     {
         private readonly Gambling_AppContext _context;
@@ -20,15 +19,16 @@ namespace AAA_API.Controllers
             _context = context;
         }
 
-        // GET: api/TblFootballTeams
+        // SHOWING FOOTBALL TEAMS : api/TblFootballTeams
         [HttpGet]
         public async Task<ActionResult<IEnumerable<TblFootballTeam>>> GetTblFootballTeam()
         {
             return await _context.TblFootballTeam.ToListAsync();
         }
 
-        // GET: api/TblFootballTeams/5
+        // SHOWING FOOTBALL TEAMS DETAIL : api/TblFootballTeams/5
         [HttpGet("{id}")]
+        [Authorize(Policy = "Admin")]
         public async Task<ActionResult<TblFootballTeam>> GetTblFootballTeam(decimal id)
         {
             var tblFootballTeam = await _context.TblFootballTeam.FindAsync(id);
@@ -41,10 +41,9 @@ namespace AAA_API.Controllers
             return tblFootballTeam;
         }
 
-        // PUT: api/TblFootballTeams/5
-        // To protect from overposting attacks, enable the specific properties you want to bind to, for
-        // more details, see https://go.microsoft.com/fwlink/?linkid=2123754.
+        // EDITING FOOTBALL TEAMS : api/TblFootballTeams/5
         [HttpPut("{id}")]
+        [Authorize(Policy = "Admin")]
         public async Task<IActionResult> PutTblFootballTeam(decimal id, TblFootballTeam tblFootballTeam)
         {
             if (id != tblFootballTeam.FootballTeamId)
@@ -71,34 +70,6 @@ namespace AAA_API.Controllers
             }
 
             return NoContent();
-        }
-
-        // POST: api/TblFootballTeams
-        // To protect from overposting attacks, enable the specific properties you want to bind to, for
-        // more details, see https://go.microsoft.com/fwlink/?linkid=2123754.
-        [HttpPost]
-        public async Task<ActionResult<TblFootballTeam>> PostTblFootballTeam(TblFootballTeam tblFootballTeam)
-        {
-            _context.TblFootballTeam.Add(tblFootballTeam);
-            await _context.SaveChangesAsync();
-
-            return CreatedAtAction("GetTblFootballTeam", new { id = tblFootballTeam.FootballTeamId }, tblFootballTeam);
-        }
-
-        // DELETE: api/TblFootballTeams/5
-        [HttpDelete("{id}")]
-        public async Task<ActionResult<TblFootballTeam>> DeleteTblFootballTeam(decimal id)
-        {
-            var tblFootballTeam = await _context.TblFootballTeam.FindAsync(id);
-            if (tblFootballTeam == null)
-            {
-                return NotFound();
-            }
-
-            _context.TblFootballTeam.Remove(tblFootballTeam);
-            await _context.SaveChangesAsync();
-
-            return tblFootballTeam;
         }
 
         private bool TblFootballTeamExists(decimal id)

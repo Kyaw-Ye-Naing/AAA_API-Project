@@ -29,7 +29,6 @@ namespace AAA_API.Controllers
 
         [HttpGet]
         [Route("home")]
-        // [Authorize(Policy = Policies.User)]
         [Authorize(Policy = "Person")]
         public IActionResult Index()
         {
@@ -40,9 +39,9 @@ namespace AAA_API.Controllers
             return Ok("This is a response from Person method");
         }
 
-        //Login 
+        // USER LOGIN :  api/Home/authenticate
         [HttpPost]
-        [Route("authenicate")]
+        [Route("authenticate")]
         [AllowAnonymous]
         public IActionResult Login([FromBody] AuthenicateModel login)
         {
@@ -63,7 +62,7 @@ namespace AAA_API.Controllers
                 return BadRequest(new { message = "Your account is locked!" });
             }
 
-            //return logged user information and token
+            //Return logged user information and token
             if (user != null)
             {
                 var tokenString = GenerateJWTToken(user);
@@ -108,8 +107,7 @@ namespace AAA_API.Controllers
             return new JwtSecurityTokenHandler().WriteToken(token);
         }
 
-        //Account lock 
-        // PUT: api/Home/5
+        // LOCKING USER ACCOUNT :  api/Home/lock/5
         [HttpPut("lock/{id}")]
         [Authorize(Policy = "Person")]
         public IActionResult Lock(decimal id)
@@ -142,7 +140,7 @@ namespace AAA_API.Controllers
             return Ok(new { Message = "Successfully locked" });
         }
 
-        //Reset Password
+        // RESETING USER'S PASSWORD FROM MASTER :  api/Home/reset
         [HttpPost]
         [Route("reset")]
         [Authorize(Policy = "Person")]
@@ -187,7 +185,7 @@ namespace AAA_API.Controllers
             }
         }
 
-        //Change Password 
+        // CHANGING USER'S PASSWORD FROM ACCOUNT : api/Home/change 
         [HttpPost]
         [Route("change")]
         public IActionResult ChangePassword(ChangePassword change)

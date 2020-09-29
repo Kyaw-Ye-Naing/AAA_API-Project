@@ -1,8 +1,6 @@
-﻿using System;
-using System.Collections.Generic;
+﻿using System.Collections.Generic;
 using System.Linq;
 using System.Threading.Tasks;
-using Microsoft.AspNetCore.Http;
 using Microsoft.AspNetCore.Mvc;
 using Microsoft.EntityFrameworkCore;
 using AAA_API.Models;
@@ -22,30 +20,14 @@ namespace AAA_API.Controllers
             _context = context;
         }
 
-        // GET: api/TblRoles
+        // SHOWING USER ROLES : api/TblRoles
         [HttpGet]
         public async Task<ActionResult<IEnumerable<TblRole>>> GetTblRole()
         {
             return await _context.TblRole.ToListAsync();
         }
 
-        // GET: api/TblRoles/5
-        [HttpGet("{id}")]
-        public async Task<ActionResult<TblRole>> GetTblRole(int id)
-        {
-            var tblRole = await _context.TblRole.FindAsync(id);
-
-            if (tblRole == null)
-            {
-                return NotFound();
-            }
-
-            return tblRole;
-        }
-
-        // PUT: api/TblRoles/5
-        // To protect from overposting attacks, enable the specific properties you want to bind to, for
-        // more details, see https://go.microsoft.com/fwlink/?linkid=2123754.
+        // EDITNG USER ROLES : api/TblRoles/5
         [HttpPut("{id}")]
         public async Task<IActionResult> PutTblRole(int id, TblRole tblRole)
         {
@@ -75,7 +57,7 @@ namespace AAA_API.Controllers
             return NoContent();
         }
 
-        // POST: api/TblRoles
+        // CREATING USER ROLES : api/TblRoles
         [HttpPost]
         public async Task<ActionResult<TblRole>> PostTblRole(TblRole tblRole)
         {
@@ -91,7 +73,7 @@ namespace AAA_API.Controllers
             return CreatedAtAction("GetTblRole", new { id = role.RoleId }, role);
         }
 
-        // DELETE: api/TblRoles/5
+        // DELETING USER ROLES : api/TblRoles/5
         [HttpDelete("{id}")]
         public async Task<ActionResult<TblRole>> DeleteTblRole(int id)
         {
