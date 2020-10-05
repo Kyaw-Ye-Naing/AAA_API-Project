@@ -93,7 +93,8 @@ namespace AAA_API.Controllers
                   // new Claim(JwtRegisteredClaimNames.Sub, userInfo.Username),
                   new Claim("userId",userInfo.UserId.ToString()),
                    new Claim("name",userInfo.Username),
-                    new Claim("Pwd", userInfo.Password.ToString()),
+                  //  new Claim("Pwd", userInfo.Password.ToString()),
+                    new Claim("roleId",userInfo.RoleId.ToString()),
                     new Claim("role",role),
                   new Claim(JwtRegisteredClaimNames.Jti, Guid.NewGuid().ToString()),
             };

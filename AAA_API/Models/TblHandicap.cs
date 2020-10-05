@@ -12,5 +12,8 @@ namespace AAA_API.Models
         public decimal? AwayOdd { get; set; }
         public string AwayHandicap { get; set; }
         public DateTime? EventDatetime { get; set; }
+        public decimal? OverOdd { get; set; }
+        public decimal? UnderOdd { get; set; }
+        public string GoalHandicap { get; set; }
     }
 }

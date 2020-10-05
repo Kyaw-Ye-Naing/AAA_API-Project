@@ -30,6 +30,8 @@ namespace AAA_API.Models
         public virtual DbSet<TblUpcomingEvent> TblUpcomingEvent { get; set; }
         public virtual DbSet<TblUser> TblUser { get; set; }
         public virtual DbSet<TblUserBalance> TblUserBalance { get; set; }
+        public virtual DbSet<TblUserCommission> TblUserCommission { get; set; }
+        public virtual DbSet<TblUserCommissionType> TblUserCommissionType { get; set; }
         public virtual DbSet<TblUserPosting> TblUserPosting { get; set; }
         public virtual DbSet<ViewUserBalance> ViewUserBalance { get; set; }
 
@@ -291,6 +293,10 @@ namespace AAA_API.Models
                     .HasColumnName("eventDatetime")
                     .HasColumnType("datetime");
 
+                entity.Property(e => e.GoalHandicap)
+                    .HasColumnName("goalHandicap")
+                    .HasMaxLength(50);
+
                 entity.Property(e => e.HomeHandicap)
                     .HasColumnName("homeHandicap")
                     .HasMaxLength(50);
@@ -299,8 +305,16 @@ namespace AAA_API.Models
                     .HasColumnName("homeOdd")
                     .HasColumnType("decimal(18, 2)");
 
+                entity.Property(e => e.OverOdd)
+                    .HasColumnName("overOdd")
+                    .HasColumnType("decimal(18, 0)");
+
                 entity.Property(e => e.RapidEventId)
                     .HasColumnName("rapidEventId")
+                    .HasColumnType("decimal(18, 0)");
+
+                entity.Property(e => e.UnderOdd)
+                    .HasColumnName("underOdd")
                     .HasColumnType("decimal(18, 0)");
             });
 
@@ -552,6 +566,54 @@ namespace AAA_API.Models
                 entity.Property(e => e.UserId)
                     .HasColumnName("userId")
                     .HasColumnType("decimal(18, 0)");
+            });
+
+            modelBuilder.Entity<TblUserCommission>(entity =>
+            {
+                entity.HasKey(e => e.UserCommissionId);
+
+                entity.ToTable("tbl_userCommission");
+
+                entity.Property(e => e.UserCommissionId)
+                    .HasColumnName("userCommissionId")
+                    .HasColumnType("decimal(18, 0)")
+                    .ValueGeneratedOnAdd();
+
+                entity.Property(e => e.SubUserCommission)
+                    .HasColumnName("subUserCommission")
+                    .HasColumnType("decimal(18, 0)");
+
+                entity.Property(e => e.SubUserId)
+                    .HasColumnName("subUserId")
+                    .HasColumnType("decimal(18, 0)");
+
+                entity.Property(e => e.UserCommission)
+                    .HasColumnName("userCommission")
+                    .HasColumnType("decimal(18, 2)");
+
+                entity.Property(e => e.UserCommissionTypeId).HasColumnName("userCommissionTypeId");
+
+                entity.Property(e => e.UserId)
+                    .HasColumnName("userId")
+                    .HasColumnType("decimal(18, 0)");
+            });
+
+            modelBuilder.Entity<TblUserCommissionType>(entity =>
+            {
+                entity.HasKey(e => e.CommissionTypeId)
+                    .HasName("PK_tbl_commissionType");
+
+                entity.ToTable("tbl_userCommissionType");
+
+                entity.Property(e => e.CommissionTypeId).HasColumnName("commissionTypeId");
+
+                entity.Property(e => e.BetTeamCount).HasColumnName("betTeamCount");
+
+                entity.Property(e => e.CommissionType)
+                    .HasColumnName("commissionType")
+                    .HasMaxLength(50);
+
+                entity.Property(e => e.GamblingTypeId).HasColumnName("gamblingTypeId");
             });
 
             modelBuilder.Entity<TblUserPosting>(entity =>
