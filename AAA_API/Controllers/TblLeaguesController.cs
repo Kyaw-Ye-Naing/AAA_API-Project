@@ -48,6 +48,21 @@ namespace AAA_API.Controllers
             };
             _context.TblConfirmLeague.Add(confirmLeague);
             _context.SaveChangesAsync();
+
+            TblUpcomingEvent result1= _context.TblUpcomingEvent.Find(league.LeagueId);
+            TblPreUpcomingEvent preUpcomingEvent = new TblPreUpcomingEvent
+            {
+                RapidEventId = result1.RapidEventId,
+                LeagueId = result1.LeagueId,
+                HomeTeamId = result1.HomeTeamId,
+                AwayTeamId = result1.AwayTeamId,
+                EventDate = result1.EventDate,
+                EventTime = result1.EventTime,
+                Active = result1.Active
+            };
+            _context.TblPreUpcomingEvent.Add(preUpcomingEvent);
+            _context.SaveChangesAsync();
+
             return Ok(new { status = "Successfully Inserted" });
             // return CreatedAtAction("GetTblConfirmLeague", new { id = tblLeague.LeagueId }, tblLeague);
         }

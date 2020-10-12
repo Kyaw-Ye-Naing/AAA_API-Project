@@ -821,7 +821,6 @@ C:\Users\Lenovo\Desktop\AAA_API-Project\AAA_API-Project\AAA_API\bin\Debug\netcor
 C:\Users\Lenovo\Desktop\AAA_API-Project\AAA_API-Project\AAA_API\bin\Debug\netcoreapp3.1\runtimes\unix\lib\netcoreapp2.0\System.Runtime.Caching.dll
 C:\Users\Lenovo\Desktop\AAA_API-Project\AAA_API-Project\AAA_API\bin\Debug\netcoreapp3.1\runtimes\win\lib\netcoreapp2.0\System.Runtime.Caching.dll
 C:\Users\Lenovo\Desktop\AAA_API-Project\AAA_API-Project\AAA_API\bin\Debug\netcoreapp3.1\runtimes\win\lib\netstandard2.0\System.Security.Cryptography.ProtectedData.dll
-C:\Users\Lenovo\Desktop\AAA_API-Project\AAA_API-Project\AAA_API\obj\Debug\netcoreapp3.1\AAA_API.csprojAssemblyReference.cache
 C:\Users\Lenovo\Desktop\AAA_API-Project\AAA_API-Project\AAA_API\obj\Debug\netcoreapp3.1\AAA_API.AssemblyInfoInputs.cache
 C:\Users\Lenovo\Desktop\AAA_API-Project\AAA_API-Project\AAA_API\obj\Debug\netcoreapp3.1\AAA_API.AssemblyInfo.cs
 C:\Users\Lenovo\Desktop\AAA_API-Project\AAA_API-Project\AAA_API\obj\Debug\netcoreapp3.1\AAA_API.csproj.CoreCompileInputs.cache

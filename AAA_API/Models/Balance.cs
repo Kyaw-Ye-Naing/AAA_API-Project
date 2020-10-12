@@ -7,6 +7,6 @@ namespace AAA_API.Models
 {
     public class Balance
     {
-        public decimal amount { get; set; } 
+        public decimal Amount { get; set; } 
     }
 }

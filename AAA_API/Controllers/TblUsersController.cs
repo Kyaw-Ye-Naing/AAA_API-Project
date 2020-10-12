@@ -46,9 +46,8 @@ namespace AAA_API.Controllers
         // EDITING USER : api/TblUsers/edit/5
         [HttpPut("{id}")]
         [Authorize(Policy = "Person")]
-        public IActionResult PutTblUser(decimal id, TblUser tblUser)
+        public IActionResult PutTblUser(decimal id, Commission tblUser)
         {
-            IActionResult response = Unauthorized();
             if (id != tblUser.UserId)
             {
                 return BadRequest();
@@ -61,83 +60,114 @@ namespace AAA_API.Controllers
             }
             else
             {
+                //Update user information
+                //Admin
                 if (Convert.ToInt32(userRole) == 1)
                 {
-                    _context.Entry(tblUser).State = EntityState.Modified;
-                    _context.SaveChangesAsync();
-                }
+                    TblUser editUser = _context.TblUser.Find(id);
+                    editUser.Username = tblUser.Username;
+                    editUser.Mobile = tblUser.Mobile;
+                    editUser.Password = tblUser.Password;
+                    editUser.RoleId = tblUser.RoleId;
+                    editUser.Lock = false;
+                    editUser.SharePercent = tblUser.SharePercent;
+                    editUser.BetLimitForMix = tblUser.BetLimitForMix;
+                    editUser.CreatedBy = Decimal.Parse(userId);
+                    editUser.CreatedDate = DateTime.Now;
+                    _context.SaveChanges();
+
+                    //Find commissions of current logged user and its created user
+                    var tblUser1 = _context.TblUserCommission.Where(a => a.UserId == Decimal.Parse(userId) && a.SubUserId == id)
+                                                            .Select(a => a.UserCommissionId)
+                                                            .ToList();
+
+                    //Delete previous user commissions
+                    foreach (var item in tblUser1)
+                    {
+                        TblUserCommission editUser1 = _context.TblUserCommission.Find(item);
+                        _context.TblUserCommission.Remove(editUser1);
+                        _context.SaveChanges();
+                    }
+
+                    //Created new user commissions
+                    foreach (var s in tblUser.commission)
+                    {
+                        TblUserCommission userCommission = new TblUserCommission();
+                        userCommission.UserCommissionTypeId = s.CommissionTypeId;
+                        userCommission.UserId = Decimal.Parse(userId);
+                        userCommission.UserCommission = 0;
+                        userCommission.SubUserId = id;
+                        userCommission.SubUserCommission = s.SubUserCommission;
+                        _context.TblUserCommission.Add(userCommission);
+                    }
+                    _context.SaveChanges();
+                }//admin
+
+                //Other user(seniorMaster,Master,Agent)
                 else
                 {
-
-                    
-                    var Receiver_value = _context.TblUser.FirstOrDefault(s => s.UserId == id);
-                    if (tblUser.BetLimitForMix <= Receiver_value.BetLimitForMix) { }
-                        Receiver_value.Username = tblUser.Username;
-                    Receiver_value.Mobile = tblUser.Mobile;
-                    Receiver_value.Password = tblUser.Password;
-                    Receiver_value.RoleId = tblUser.RoleId;
-                    Receiver_value.Lock = false;
-                    Receiver_value.SharePercent = tblUser.SharePercent;
-                    Receiver_value.BetLimitForMix = tblUser.BetLimitForMix;
-                    Receiver_value.BetLimitForSingle = tblUser.BetLimitForSingle;
-                    Receiver_value.SingleBetCommission5 = tblUser.SingleBetCommission5;
-                    Receiver_value.SingleBetCommission8 = tblUser.SingleBetCommission8;
-                    Receiver_value.MixBetCommission2count15 = tblUser.MixBetCommission2count15;
-                    Receiver_value.MixBetCommission3count20 = tblUser.MixBetCommission3count20;
-                    Receiver_value.MixBetCommission4count20 = tblUser.MixBetCommission4count20;
-                    Receiver_value.MixBetCommission5count20 = tblUser.MixBetCommission5count20;
-                    Receiver_value.MixBetCommission6count20 = tblUser.MixBetCommission6count20;
-                    Receiver_value.MixBetCommission7count20 = tblUser.MixBetCommission7count20;
-                    Receiver_value.MixBetCommission8count20 = tblUser.MixBetCommission8count20;
-                    Receiver_value.MixBetCommission9count25 = tblUser.MixBetCommission9count25;
-                    Receiver_value.MixBetCommission10count25 = tblUser.MixBetCommission10count25;
-                    Receiver_value.MixBetCommission11count25 = tblUser.MixBetCommission11count25;
-                    Receiver_value.CreatedBy = Decimal.Parse(userId);
-                    Receiver_value.CreatedDate = DateTime.Now;
+                    TblUser editUser = _context.TblUser.Find(id);
+                    editUser.Username = tblUser.Username;
+                    editUser.Mobile = tblUser.Mobile;
+                    editUser.Password = tblUser.Password;
+                    editUser.RoleId = tblUser.RoleId;
+                    editUser.Lock = false;
+                    editUser.SharePercent = tblUser.SharePercent;
+                    editUser.BetLimitForMix = tblUser.BetLimitForMix;
+                    editUser.CreatedBy = Decimal.Parse(userId);
+                    editUser.CreatedDate = DateTime.Now;
                     _context.SaveChanges();
 
-                    var Sender_value = _context.TblUser.FirstOrDefault(s => s.UserId == Decimal.Parse(userId));
-                    Sender_value.SharePercent = Sender_value.SharePercent - tblUser.SharePercent;
-                    Sender_value.BetLimitForMix = Sender_value.BetLimitForMix - tblUser.BetLimitForMix;
-                    Sender_value.BetLimitForSingle = Sender_value.BetLimitForSingle - tblUser.BetLimitForSingle;
-                    Sender_value.SingleBetCommission5 = Sender_value.SingleBetCommission5 - tblUser.SingleBetCommission5;
-                    Sender_value.SingleBetCommission8 = Sender_value.SingleBetCommission8 - tblUser.SingleBetCommission8;
-                    Sender_value.MixBetCommission2count15 = Sender_value.MixBetCommission2count15 - tblUser.MixBetCommission2count15;
-                    Sender_value.MixBetCommission3count20 = Sender_value.MixBetCommission3count20 - tblUser.MixBetCommission3count20;
-                    Sender_value.MixBetCommission4count20 = Sender_value.MixBetCommission4count20 - tblUser.MixBetCommission4count20;
-                    Sender_value.MixBetCommission5count20 = Sender_value.MixBetCommission5count20 - tblUser.MixBetCommission5count20;
-                    Sender_value.MixBetCommission6count20 = Sender_value.MixBetCommission6count20 - tblUser.MixBetCommission6count20;
-                    Sender_value.MixBetCommission7count20 = Sender_value.MixBetCommission7count20 - tblUser.MixBetCommission7count20;
-                    Sender_value.MixBetCommission8count20 = Sender_value.MixBetCommission8count20 - tblUser.MixBetCommission8count20;
-                    Sender_value.MixBetCommission9count25 = Sender_value.MixBetCommission9count25 - tblUser.MixBetCommission9count25;
-                    Sender_value.MixBetCommission10count25 = Sender_value.MixBetCommission10count25 - tblUser.MixBetCommission10count25;
-                    Sender_value.MixBetCommission11count25 = -Sender_value.MixBetCommission11count25 - tblUser.MixBetCommission11count25;
-                    Sender_value.CreatedBy = Decimal.Parse(userId);
-                    Sender_value.CreatedDate = DateTime.Now;
-                    _context.SaveChanges();
-                    // value = _context.TblUser.Where(s => s.UserId == Decimal.Parse(userId)).First();
-                    response = Ok(new
+                    //Find commissions of current logged user and its created user
+                    var tblUser1 = _context.TblUserCommission.Where(a => a.UserId == Decimal.Parse(userId) && a.SubUserId == id)
+                                                            .Select(a => a.UserCommissionId)
+                                                            .ToList();
+
+                    //Delete previous user commissions
+                    foreach (var item in tblUser1)
                     {
-                        message = "Updated Successfully",
-                        userDetails = Sender_value,
-                    });
-                }
+                        TblUserCommission editUser1 = _context.TblUserCommission.Find(item);
+                        _context.TblUserCommission.Remove(editUser1);
+                        _context.SaveChanges();
+                    }
 
-            }
-            return response;
+                    //Get previous user commissions
+                    var prevCommission = _context.TblUserCommission.Where(a => a.SubUserId == Decimal.Parse(userId))
+                                                             .Select(c => new { c.UserCommissionTypeId, c.SubUserCommission })
+                                                             .ToDictionary(c => c.UserCommissionTypeId, c => c.SubUserCommission);
+
+                    //Create new user commissions
+                    foreach (var s in tblUser.commission)
+                    {
+                        TblUserCommission userCommission = new TblUserCommission();
+                        userCommission.UserCommissionTypeId = s.CommissionTypeId;
+                        userCommission.UserId = Decimal.Parse(userId);
+                        userCommission.UserCommission = prevCommission.ElementAt(1).Value - s.SubUserCommission;
+                        userCommission.SubUserId = id;
+                        userCommission.SubUserCommission = s.SubUserCommission;
+                        _context.TblUserCommission.Add(userCommission);
+                    }
+                    _context.SaveChanges();
+                }//other
+
+            }//user id exists
+            return Ok();
         }
 
 
         // CREATING USER : api/TblUsers
         [HttpPost]
         [Authorize(Policy = "Person")]
-        public IActionResult PostTblUser(TblUser tblUser)
+        public IActionResult PostTblUser(Commission tblUser)
         {
-          
+
             var userRole = User.FindFirst("roleId")?.Value;
             var userId = User.FindFirst("userId")?.Value;
+
+            //Admin
             if (Convert.ToInt32(userRole) == 1)
             {
+                //Create user information
                 TblUser user = new TblUser()
                 {
                     Username = tblUser.Username,
@@ -147,77 +177,67 @@ namespace AAA_API.Controllers
                     Lock = false,
                     SharePercent = tblUser.SharePercent,
                     BetLimitForMix = tblUser.BetLimitForMix,
-
-                    BetLimitForSingle = tblUser.BetLimitForSingle,
-                    SingleBetCommission8 = tblUser.SingleBetCommission8,
-                    MixBetCommission2count15 = tblUser.MixBetCommission2count15,
-                    MixBetCommission3count20 = tblUser.MixBetCommission3count20,
-                    MixBetCommission4count20 = tblUser.MixBetCommission4count20,
-                    MixBetCommission5count20 = tblUser.MixBetCommission5count20,
-                    MixBetCommission6count20 = tblUser.MixBetCommission6count20,
-                    MixBetCommission7count20 = tblUser.MixBetCommission7count20,
-                    MixBetCommission8count20 = tblUser.MixBetCommission8count20,
-                    MixBetCommission9count25 = tblUser.MixBetCommission9count25,
-                    MixBetCommission10count25 = tblUser.MixBetCommission10count25,
-                    MixBetCommission11count25 = tblUser.MixBetCommission11count25,
                     CreatedBy = Decimal.Parse(userId),
                     CreatedDate = DateTime.Now
                 };
                 _context.TblUser.Add(user);
                 _context.SaveChanges();
+                var id = user.UserId;
 
-                object[] temp = new object[13];
-                temp[1] = tblUser.SingleBetCommission5;
-                temp[2] = tblUser.SingleBetCommission8;
-                temp[3] = tblUser.MixBetCommission2count15;
-                temp[4] = tblUser.MixBetCommission3count20;
-                temp[5] = tblUser.MixBetCommission4count20;
-                temp[6] = tblUser.MixBetCommission5count20;
-                temp[7] = tblUser.MixBetCommission6count20;
-                temp[8] = tblUser.MixBetCommission7count20;
-                temp[9] = tblUser.MixBetCommission8count20;
-                temp[10] = tblUser.MixBetCommission9count25;
-                temp[11] = tblUser.MixBetCommission10count25;
-                temp[12] = tblUser.MixBetCommission11count25;
-
-                TblUserCommission userCommission = new TblUserCommission();
-                var userIdd = _context.TblUser.Max(m=>m.UserId);
-                for (var i = 1; i <= 12; i++)
+                //Create user's commission
+                foreach (var s in tblUser.commission)
                 {
-                    userCommission.UserCommissionTypeId = i;
+                    TblUserCommission userCommission = new TblUserCommission();
+                    userCommission.UserCommissionTypeId = s.CommissionTypeId;
                     userCommission.UserId = Decimal.Parse(userId);
                     userCommission.UserCommission = 0;
-                    userCommission.SubUserId = userIdd;
-                    userCommission.SubUserCommission = Convert.ToDecimal(temp[i]);
-
+                    userCommission.SubUserId = id;
+                    userCommission.SubUserCommission = s.SubUserCommission;
                     _context.TblUserCommission.Add(userCommission);
-                 
-
                 }
-             
-                //  userCommission.UserCommissionTypeId = 1;
-                //  userCommission.UserId = Decimal.Parse(userId);
-                //  userCommission.UserCommission = 0;
-                //  userCommission.SubUserId = user.UserId;
-                //  userCommission.SubUserCommission = tblUser.SingleBetCommission5;
+                _context.SaveChanges();
+            }//Admin
 
-                ///  _context.TblUserCommission.Add(userCommission);
-                //
-                // userCommission.UserCommissionTypeId = 2;
-                //  userCommission.UserId = Decimal.Parse(userId);
-                //  userCommission.UserCommission = 0;
-                //  userCommission.SubUserId = user.UserId;
-                //  userCommission.SubUserCommission = tblUser.SingleBetCommission8;
+            //Other(SeniorMaster,Master,Agent)
+            else
+            {
+                //Create user information
+                TblUser user = new TblUser()
+                {
+                    Username = tblUser.Username,
+                    Mobile = tblUser.Mobile,
+                    Password = tblUser.Password,
+                    RoleId = tblUser.RoleId,
+                    Lock = false,
+                    SharePercent = tblUser.SharePercent,
+                    BetLimitForMix = tblUser.BetLimitForMix,
+                    CreatedBy = Decimal.Parse(userId),
+                    CreatedDate = DateTime.Now
+                };
+                _context.TblUser.Add(user);
+                _context.SaveChanges();
+                var id = user.UserId;
 
-                //  _context.TblUserCommission.Add(userCommission);
 
 
-                //   _context.SaveChanges();
+                var prevCommission = _context.TblUserCommission.Where(a => a.SubUserId == Decimal.Parse(userId))
+                                                             .Select(c => new { c.UserCommissionTypeId, c.SubUserCommission })
+                                                              .ToDictionary(c => c.UserCommissionTypeId, c => c.SubUserCommission);
 
-                // int Id = db.SaleHdrs.Max(o => o.Id);
-            }
-            _context.SaveChanges();
-            return Ok();
+                //Create user's commission
+                foreach (var s in tblUser.commission)
+                {
+                    TblUserCommission userCommission = new TblUserCommission();
+                    userCommission.UserCommissionTypeId = s.CommissionTypeId;
+                    userCommission.UserId = Decimal.Parse(userId);
+                    userCommission.UserCommission = prevCommission.ElementAt(1).Value - s.SubUserCommission;
+                    userCommission.SubUserId = id;
+                    userCommission.SubUserCommission =s.SubUserCommission;
+                    _context.TblUserCommission.Add(userCommission);
+                }
+                _context.SaveChanges();
+            }//Other
+           return Ok();
         }
 
         // DELETING USER : api/TblUsers/5
@@ -257,7 +277,7 @@ namespace AAA_API.Controllers
                 hour.ToString() + minute.ToString() + second.ToString();
             userPosting.UserId = id;
             userPosting.PostingNo = str;
-            userPosting.Inward = balance.amount;
+            userPosting.Inward = balance.Amount;
             userPosting.Outward = 0;
             userPosting.Active = true;
             userPosting.CreatedBy = Decimal.Parse(user_id);
@@ -269,7 +289,7 @@ namespace AAA_API.Controllers
             TblUserBalance userBalance = new TblUserBalance();
             userBalance.PostingNo = str;
             userBalance.UserId = id;
-            userBalance.Inward = Convert.ToInt32(balance.amount);
+            userBalance.Inward = Convert.ToInt32(balance.Amount);
             userBalance.Outward = 0;
             userBalance.CreatedDate = DateTime.Now;
             _context.TblUserBalance.Add(userBalance);
@@ -290,7 +310,7 @@ namespace AAA_API.Controllers
             parent_userPosting.UserId = Decimal.Parse(user_id);
             parent_userPosting.PostingNo = parent_str;
             parent_userPosting.Inward = 0;
-            parent_userPosting.Outward = balance.amount;
+            parent_userPosting.Outward = balance.Amount;
             parent_userPosting.Active = true;
             parent_userPosting.CreatedBy = Decimal.Parse(user_id);
             parent_userPosting.CreatedDate = DateTime.Now;
@@ -302,7 +322,7 @@ namespace AAA_API.Controllers
             parent_userBalance.PostingNo = parent_str;
             parent_userBalance.UserId = Decimal.Parse(user_id);
             parent_userBalance.Inward = 0;
-            parent_userBalance.Outward = Convert.ToInt32(balance.amount);
+            parent_userBalance.Outward = Convert.ToInt32(balance.Amount);
             parent_userBalance.CreatedDate = DateTime.Now;
             _context.TblUserBalance.Add(parent_userBalance);
             _context.SaveChanges();
@@ -330,7 +350,7 @@ namespace AAA_API.Controllers
             userPosting.UserId = id;
             userPosting.PostingNo = str;
             userPosting.Inward = 0;
-            userPosting.Outward = balance.amount;
+            userPosting.Outward = balance.Amount;
             userPosting.Active = true;
             userPosting.CreatedBy = Decimal.Parse(user_id);
             userPosting.CreatedDate = DateTime.Now;
@@ -342,7 +362,7 @@ namespace AAA_API.Controllers
             userBalance.PostingNo = str;
             userBalance.UserId = id;
             userBalance.Inward = 0;
-            userBalance.Outward = Convert.ToInt32(balance.amount);
+            userBalance.Outward = Convert.ToInt32(balance.Amount);
             userBalance.CreatedDate = DateTime.Now;
             _context.TblUserBalance.Add(userBalance);
             _context.SaveChanges();
@@ -361,7 +381,7 @@ namespace AAA_API.Controllers
                 parent_hour.ToString() + parent_minute.ToString() + parent_second.ToString();
             parent_userPosting.UserId = Decimal.Parse(user_id);
             parent_userPosting.PostingNo = parent_str;
-            parent_userPosting.Inward = balance.amount;
+            parent_userPosting.Inward = balance.Amount;
             parent_userPosting.Outward = 0;
             parent_userPosting.Active = true;
             parent_userPosting.CreatedBy = Decimal.Parse(user_id);
@@ -373,7 +393,7 @@ namespace AAA_API.Controllers
             TblUserBalance parent_userBalance = new TblUserBalance();
             parent_userBalance.PostingNo = parent_str;
             parent_userBalance.UserId = Decimal.Parse(user_id);
-            parent_userBalance.Inward = Convert.ToInt32(balance.amount);
+            parent_userBalance.Inward = Convert.ToInt32(balance.Amount);
             parent_userBalance.Outward = 0;
             parent_userBalance.CreatedDate = DateTime.Now;
             _context.TblUserBalance.Add(parent_userBalance);
@@ -401,7 +421,7 @@ namespace AAA_API.Controllers
                 hour.ToString() + minute.ToString() + second.ToString();
             credit.PostingNo = str;
             credit.UserId = id;
-            credit.Amount = creditAmount.amount;
+            credit.Amount = creditAmount.Amount;
             credit.Active = true;
             credit.CreatedBy = Decimal.Parse(user_id);
             credit.CreatedDate = DateTime.Now;
@@ -422,7 +442,7 @@ namespace AAA_API.Controllers
                 parent_hour.ToString() + parent_minute.ToString() + parent_second.ToString();
             parent_credit.PostingNo = parent_str;
             parent_credit.UserId = Decimal.Parse(user_id);
-            parent_credit.Amount = creditAmount.amount;
+            parent_credit.Amount = creditAmount.Amount;
             parent_credit.Active = true;
             parent_credit.CreatedBy = Decimal.Parse(user_id);
             parent_credit.CreatedDate = DateTime.Now;
@@ -433,7 +453,7 @@ namespace AAA_API.Controllers
             TblUserPosting posting = new TblUserPosting();
             posting.PostingNo = str;
             posting.UserId = id;
-            posting.Inward = creditAmount.amount;
+            posting.Inward = creditAmount.Amount;
             posting.Outward = 0;
             posting.Active = true;
             posting.CreatedBy = Decimal.Parse(user_id);
@@ -446,7 +466,7 @@ namespace AAA_API.Controllers
             parent_posting.PostingNo = parent_str;
             parent_posting.UserId = Decimal.Parse(user_id);
             parent_posting.Inward = 0;
-            parent_posting.Outward = creditAmount.amount;
+            parent_posting.Outward = creditAmount.Amount;
             parent_posting.Active = true;
             parent_posting.CreatedBy = Decimal.Parse(user_id);
             parent_posting.CreatedDate = DateTime.Now;

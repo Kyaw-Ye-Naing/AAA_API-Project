@@ -25,8 +25,10 @@ namespace AAA_API.Models
         public virtual DbSet<TblGoalResult> TblGoalResult { get; set; }
         public virtual DbSet<TblHandicap> TblHandicap { get; set; }
         public virtual DbSet<TblLeague> TblLeague { get; set; }
+        public virtual DbSet<TblMyanHandicapResult> TblMyanHandicapResult { get; set; }
         public virtual DbSet<TblPreUpcomingEvent> TblPreUpcomingEvent { get; set; }
         public virtual DbSet<TblRole> TblRole { get; set; }
+        public virtual DbSet<TblUnitHandicapFix> TblUnitHandicapFix { get; set; }
         public virtual DbSet<TblUpcomingEvent> TblUpcomingEvent { get; set; }
         public virtual DbSet<TblUser> TblUser { get; set; }
         public virtual DbSet<TblUserBalance> TblUserBalance { get; set; }
@@ -170,6 +172,10 @@ namespace AAA_API.Models
                     .HasColumnType("decimal(18, 0)");
 
                 entity.Property(e => e.TeamCount).HasColumnName("teamCount");
+
+                entity.Property(e => e.UserId)
+                    .HasColumnName("userId")
+                    .HasColumnType("decimal(18, 0)");
             });
 
             modelBuilder.Entity<TblGamblingDetails>(entity =>
@@ -183,9 +189,9 @@ namespace AAA_API.Models
                     .HasColumnType("decimal(18, 0)")
                     .ValueGeneratedOnAdd();
 
-                entity.Property(e => e.Amount)
-                    .HasColumnName("amount")
-                    .HasColumnType("decimal(18, 0)");
+                entity.Property(e => e.BodyOdd)
+                    .HasColumnName("bodyOdd")
+                    .HasMaxLength(50);
 
                 entity.Property(e => e.FootballTeamId)
                     .HasColumnName("footballTeamId")
@@ -194,6 +200,10 @@ namespace AAA_API.Models
                 entity.Property(e => e.GamblingId)
                     .HasColumnName("gamblingId")
                     .HasColumnType("decimal(18, 0)");
+
+                entity.Property(e => e.GoalOdd)
+                    .HasColumnName("goalOdd")
+                    .HasMaxLength(50);
 
                 entity.Property(e => e.LeagueId)
                     .HasColumnName("leagueId")
@@ -307,7 +317,7 @@ namespace AAA_API.Models
 
                 entity.Property(e => e.OverOdd)
                     .HasColumnName("overOdd")
-                    .HasColumnType("decimal(18, 0)");
+                    .HasColumnType("decimal(18, 2)");
 
                 entity.Property(e => e.RapidEventId)
                     .HasColumnName("rapidEventId")
@@ -315,7 +325,7 @@ namespace AAA_API.Models
 
                 entity.Property(e => e.UnderOdd)
                     .HasColumnName("underOdd")
-                    .HasColumnType("decimal(18, 0)");
+                    .HasColumnType("decimal(18, 2)");
             });
 
             modelBuilder.Entity<TblLeague>(entity =>
@@ -337,6 +347,50 @@ namespace AAA_API.Models
 
                 entity.Property(e => e.RapidLeagueId)
                     .HasColumnName("rapidLeagueId")
+                    .HasColumnType("decimal(18, 0)");
+            });
+
+            modelBuilder.Entity<TblMyanHandicapResult>(entity =>
+            {
+                entity.HasKey(e => e.MyanHandicapResultId);
+
+                entity.ToTable("tbl_myanHandicapResult");
+
+                entity.Property(e => e.MyanHandicapResultId)
+                    .HasColumnName("myanHandicapResultId")
+                    .HasColumnType("decimal(18, 0)")
+                    .ValueGeneratedOnAdd();
+
+                entity.Property(e => e.AwayTeamId)
+                    .HasColumnName("awayTeamId")
+                    .HasColumnType("decimal(18, 0)");
+
+                entity.Property(e => e.Body)
+                    .HasColumnName("body")
+                    .HasMaxLength(50);
+
+                entity.Property(e => e.Goal)
+                    .HasColumnName("goal")
+                    .HasMaxLength(50);
+
+                entity.Property(e => e.HomeTeamId)
+                    .HasColumnName("homeTeamId")
+                    .HasColumnType("decimal(18, 0)");
+
+                entity.Property(e => e.LeagueId)
+                    .HasColumnName("leagueId")
+                    .HasColumnType("decimal(18, 0)");
+
+                entity.Property(e => e.OverTeamId)
+                    .HasColumnName("overTeamId")
+                    .HasColumnType("decimal(18, 0)");
+
+                entity.Property(e => e.RapidEventId)
+                    .HasColumnName("rapidEventId")
+                    .HasColumnType("decimal(18, 0)");
+
+                entity.Property(e => e.UnderTeamId)
+                    .HasColumnName("underTeamId")
                     .HasColumnType("decimal(18, 0)");
             });
 
@@ -402,6 +456,23 @@ namespace AAA_API.Models
 
                 entity.Property(e => e.Role)
                     .HasColumnName("role")
+                    .HasMaxLength(50);
+            });
+
+            modelBuilder.Entity<TblUnitHandicapFix>(entity =>
+            {
+                entity.HasNoKey();
+
+                entity.ToTable("tbl_unitHandicapFix");
+
+                entity.Property(e => e.GoalUnit).HasColumnName("goalUnit");
+
+                entity.Property(e => e.Handicap)
+                    .HasColumnName("handicap")
+                    .HasMaxLength(50);
+
+                entity.Property(e => e.UnitAmount)
+                    .HasColumnName("unitAmount")
                     .HasMaxLength(50);
             });
 

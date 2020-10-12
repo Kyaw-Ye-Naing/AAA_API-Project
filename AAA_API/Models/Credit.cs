@@ -7,6 +7,6 @@ namespace AAA_API.Models
 {
     public class Credit
     {
-        public int amount { get; set; }
+        public int Amount { get; set; }
     }
 }

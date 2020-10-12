@@ -11,6 +11,7 @@ namespace AAA_API.Models
         public decimal? FootballTeamId { get; set; }
         public bool? Under { get; set; }
         public bool? Overs { get; set; }
-        public decimal? Amount { get; set; }
+        public string BodyOdd { get; set; }
+        public string GoalOdd { get; set; }
     }
 }
