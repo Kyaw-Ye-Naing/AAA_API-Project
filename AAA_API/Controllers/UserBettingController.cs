@@ -1,28 +1,25 @@
 ﻿using System;
 using System.Collections.Generic;
 using System.Linq;
-using System.Threading.Tasks;
 using AAA_API.Models;
 using Microsoft.AspNetCore.Authorization;
-using Microsoft.AspNetCore.Http;
 using Microsoft.AspNetCore.Mvc;
 
 namespace AAA_API.Controllers
 {
     [Route("api/[controller]")]
     [ApiController]
-    public class CalculationController : ControllerBase
+    [Authorize(Policy = "EndUser")]
+    public class UserBettingController : ControllerBase
     {
         private readonly Gambling_AppContext _context;
-        public CalculationController(Gambling_AppContext context)
+        public UserBettingController(Gambling_AppContext context)
         {
             _context = context;
         }
 
-        // CREATING USER'S GAMBLING INFO FROM MOBILE : api/Calculation/betting
+        // CREATING USER'S GAMBLING INFO FROM MOBILE : api/UserBetting
         [HttpPost]
-        [Route("betting")]
-        [Authorize(Policy = "EndUser")]
         public IActionResult BettingPost(UserBetting userBetting)
         {
             var user_id = User.FindFirst("userId")?.Value;
@@ -87,6 +84,30 @@ namespace AAA_API.Controllers
             {
                 message = "Betting Successfully"
             }); 
+        }
+
+        //SHOWING MYANMAR BODY HANDICAP AND GOAL HANDICAP TO USERS : api/UserBetting
+        [HttpGet]
+        public IActionResult ShowHandicap()
+        {
+            TblMyanHandicapResult myanHandicapResult = new TblMyanHandicapResult();
+
+            var result = (from m in _context.TblMyanHandicapResult 
+                          join l in _context.TblLeague 
+                          on m.LeagueId equals l.LeagueId 
+                          select new
+                          {
+                              BodyHandicap =m.Body,
+                              GoalHandicap=m.Goal,
+                              OverTeam=_context.TblFootballTeam.Where(a=>a.FootballTeamId==m.OverTeamId).First().FootballTeam,
+                              UnderTeam = _context.TblFootballTeam.Where(a => a.FootballTeamId == m.UnderTeamId).First().FootballTeam,
+                              HomeTeam = _context.TblFootballTeam.Where(a => a.FootballTeamId == m.HomeTeamId).First().FootballTeam,
+                              AwayTeam = _context.TblFootballTeam.Where(a => a.FootballTeamId == m.AwayTeamId).First().FootballTeam,
+                              League = l.LeagueName,
+                              RapidTeamId = m.RapidEventId
+                              // other assignments
+                          }).ToList();
+            return Ok(result);
         }
     }
 }

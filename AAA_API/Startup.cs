@@ -52,7 +52,7 @@ namespace AAA_API
 
             services.AddAuthorization(options =>
             {
-                options.AddPolicy("Person", policy => policy.RequireRole("Admin", "Master","SemiMaster"));
+                options.AddPolicy("Person", policy => policy.RequireRole("Admin","Master","SemiMaster"));
                 options.AddPolicy("EndUser", policy => policy.RequireRole("User"));
                 options.AddPolicy("Admin", policy => policy.RequireRole("Admin"));
             });

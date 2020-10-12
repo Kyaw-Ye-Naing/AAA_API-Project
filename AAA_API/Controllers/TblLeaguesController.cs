@@ -1,13 +1,11 @@
-﻿using System;
+﻿using AAA_API.Models;
+using Microsoft.AspNetCore.Authorization;
+using Microsoft.AspNetCore.Mvc;
+using Microsoft.EntityFrameworkCore;
+using Microsoft.Extensions.Configuration;
 using System.Collections.Generic;
 using System.Linq;
 using System.Threading.Tasks;
-using Microsoft.AspNetCore.Http;
-using Microsoft.AspNetCore.Mvc;
-using Microsoft.EntityFrameworkCore;
-using AAA_API.Models;
-using Microsoft.Extensions.Configuration;
-using Microsoft.AspNetCore.Authorization;
 
 namespace AAA_API.Controllers
 {
@@ -31,40 +29,41 @@ namespace AAA_API.Controllers
             return await _context.TblLeague.ToListAsync();
         }
 
-        // INSERTING LEAGUES INTO CONFIRM LEAGUES : api/TblLeagues/5
-        [HttpPut("{id}")]
-        public IActionResult PutTblLeague(decimal id)
+        // INSERTING LEAGUES INTO CONFIRM LEAGUES : api/TblLeagues
+        [HttpPost]
+        [System.Obsolete]
+        public IActionResult PostTblLeague(ConfirmLeague confrimLeague)
         {
-            TblLeague league = _context.TblLeague.Find(id);
-            if (TblConfirmLeagueExists(league.LeagueId))
-            {
-                return BadRequest(new { Message = "Selected league is already exist" });
-            }
-            TblConfirmLeague confirmLeague = new TblConfirmLeague()
-            {
-                LeagueId = league.LeagueId,
-                RapidLeagueId = league.RapidLeagueId,
-                Active = true
-            };
-            _context.TblConfirmLeague.Add(confirmLeague);
-            _context.SaveChangesAsync();
+            _context.Database.ExecuteSqlCommand("use Gambling_App; TRUNCATE Table tbl_confirmLeague;");
+            _context.Database.ExecuteSqlCommand("use Gambling_App; TRUNCATE Table tbl_preUpcomingEvent;");
 
-            TblUpcomingEvent result1= _context.TblUpcomingEvent.Find(league.LeagueId);
-            TblPreUpcomingEvent preUpcomingEvent = new TblPreUpcomingEvent
+            foreach (var item in confrimLeague.LeagueList)
             {
-                RapidEventId = result1.RapidEventId,
-                LeagueId = result1.LeagueId,
-                HomeTeamId = result1.HomeTeamId,
-                AwayTeamId = result1.AwayTeamId,
-                EventDate = result1.EventDate,
-                EventTime = result1.EventTime,
-                Active = result1.Active
-            };
-            _context.TblPreUpcomingEvent.Add(preUpcomingEvent);
-            _context.SaveChangesAsync();
+                
+                TblConfirmLeague confirmLeague = new TblConfirmLeague()
+                {
+                    LeagueId = item.LeagueId,
+                    RapidLeagueId = item.RapidLeagueId,
+                    Active = true
+                };
+                _context.TblConfirmLeague.Add(confirmLeague);
+                _context.SaveChanges();
 
-            return Ok(new { status = "Successfully Inserted" });
-            // return CreatedAtAction("GetTblConfirmLeague", new { id = tblLeague.LeagueId }, tblLeague);
+                var result = _context.TblUpcomingEvent.Find(item.LeagueId);
+                TblPreUpcomingEvent preUpcomingEvent = new TblPreUpcomingEvent
+                {
+                    RapidEventId = result.RapidEventId,
+                    LeagueId = result.LeagueId,
+                    HomeTeamId = result.HomeTeamId,
+                    AwayTeamId = result.AwayTeamId,
+                    EventDate = result.EventDate,
+                    EventTime = result.EventTime,
+                    Active = result.Active
+                };
+                _context.TblPreUpcomingEvent.Add(preUpcomingEvent);
+                _context.SaveChanges();
+            }         
+            return Ok(new { message = "Successfully Inserted" });
         }
 
         //Check Id exists in league table
