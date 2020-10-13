@@ -225,6 +225,10 @@ namespace AAA_API.Models
                 entity.Property(e => e.GamblingType)
                     .HasColumnName("gamblingType")
                     .HasMaxLength(50);
+
+                entity.Property(e => e.MaxBetAmount).HasColumnName("maxBetAmount");
+
+                entity.Property(e => e.MinBetAmount).HasColumnName("minBetAmount");
             });
 
             modelBuilder.Entity<TblGamblingWin>(entity =>
@@ -544,46 +548,6 @@ namespace AAA_API.Models
 
                 entity.Property(e => e.Lock).HasColumnName("lock");
 
-                entity.Property(e => e.MixBetCommission10count25)
-                    .HasColumnName("mixBetCommission10count25")
-                    .HasColumnType("decimal(18, 2)");
-
-                entity.Property(e => e.MixBetCommission11count25)
-                    .HasColumnName("mixBetCommission11count25")
-                    .HasColumnType("decimal(18, 2)");
-
-                entity.Property(e => e.MixBetCommission2count15)
-                    .HasColumnName("mixBetCommission2count15")
-                    .HasColumnType("decimal(18, 2)");
-
-                entity.Property(e => e.MixBetCommission3count20)
-                    .HasColumnName("mixBetCommission3count20")
-                    .HasColumnType("decimal(18, 2)");
-
-                entity.Property(e => e.MixBetCommission4count20)
-                    .HasColumnName("mixBetCommission4count20")
-                    .HasColumnType("decimal(18, 2)");
-
-                entity.Property(e => e.MixBetCommission5count20)
-                    .HasColumnName("mixBetCommission5count20")
-                    .HasColumnType("decimal(18, 2)");
-
-                entity.Property(e => e.MixBetCommission6count20)
-                    .HasColumnName("mixBetCommission6count20")
-                    .HasColumnType("decimal(18, 2)");
-
-                entity.Property(e => e.MixBetCommission7count20)
-                    .HasColumnName("mixBetCommission7count20")
-                    .HasColumnType("decimal(18, 2)");
-
-                entity.Property(e => e.MixBetCommission8count20)
-                    .HasColumnName("mixBetCommission8count20")
-                    .HasColumnType("decimal(18, 2)");
-
-                entity.Property(e => e.MixBetCommission9count25)
-                    .HasColumnName("mixBetCommission9count25")
-                    .HasColumnType("decimal(18, 2)");
-
                 entity.Property(e => e.Mobile)
                     .HasColumnName("mobile")
                     .HasMaxLength(50);
@@ -596,14 +560,6 @@ namespace AAA_API.Models
 
                 entity.Property(e => e.SharePercent)
                     .HasColumnName("sharePercent")
-                    .HasColumnType("decimal(18, 2)");
-
-                entity.Property(e => e.SingleBetCommission5)
-                    .HasColumnName("singleBetCommission5")
-                    .HasColumnType("decimal(18, 2)");
-
-                entity.Property(e => e.SingleBetCommission8)
-                    .HasColumnName("singleBetCommission8")
                     .HasColumnType("decimal(18, 2)");
 
                 entity.Property(e => e.Username)

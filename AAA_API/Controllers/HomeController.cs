@@ -28,6 +28,16 @@ namespace AAA_API.Controllers
         }
 
         [HttpGet]
+        public IActionResult GetAPI()
+        {
+            return Ok(new
+            {
+                message="API can be called successfully"
+            }
+            );
+        }
+
+        [HttpGet]
         [Route("home")]
         [Authorize(Policy = "Person")]
         public IActionResult Index()
@@ -122,18 +132,6 @@ namespace AAA_API.Controllers
             tblUser.SharePercent = tblUser.SharePercent;
             tblUser.BetLimitForMix = tblUser.BetLimitForMix;
             tblUser.BetLimitForSingle = tblUser.BetLimitForSingle;
-            //tblUser.SingleBetCommission5 = tblUser.SingleBetCommission5;
-            //tblUser.SingleBetCommission8 = tblUser.SingleBetCommission8;
-            //tblUser.MixBetCommission2count15 = tblUser.MixBetCommission2count15;
-            //tblUser.MixBetCommission3count20 = tblUser.MixBetCommission3count20;
-            //tblUser.MixBetCommission4count20 = tblUser.MixBetCommission4count20;
-            //tblUser.MixBetCommission5count20 = tblUser.MixBetCommission5count20;
-            //tblUser.MixBetCommission6count20 = tblUser.MixBetCommission6count20;
-            //tblUser.MixBetCommission7count20 = tblUser.MixBetCommission7count20;
-            //tblUser.MixBetCommission8count20 = tblUser.MixBetCommission8count20;
-            //tblUser.MixBetCommission9count25 = tblUser.MixBetCommission9count25;
-            //tblUser.MixBetCommission10count25 = tblUser.MixBetCommission10count25;
-            //tblUser.MixBetCommission11count25 = tblUser.MixBetCommission11count25;
             tblUser.CreatedBy = tblUser.CreatedBy;
             tblUser.CreatedDate = tblUser.CreatedDate;
             _context.SaveChanges();
@@ -165,18 +163,7 @@ namespace AAA_API.Controllers
                     user.Mobile = user.Mobile;
                     user.BetLimitForMix = user.BetLimitForMix;
                     user.BetLimitForSingle = user.BetLimitForSingle;
-                    //user.SingleBetCommission5 = user.SingleBetCommission5;
-                    //user.SingleBetCommission8 = user.SingleBetCommission8;
-                    //user.MixBetCommission2count15 = user.MixBetCommission2count15;
-                    //user.MixBetCommission3count20 = user.MixBetCommission3count20;
-                    //user.MixBetCommission4count20 = user.MixBetCommission4count20;
-                    //user.MixBetCommission5count20 = user.MixBetCommission5count20;
-                    //user.MixBetCommission6count20 = user.MixBetCommission6count20;
-                    //user.MixBetCommission7count20 = user.MixBetCommission7count20;
-                    //user.MixBetCommission8count20 = user.MixBetCommission8count20;
-                    //user.MixBetCommission9count25 = user.MixBetCommission9count25;
-                    //user.MixBetCommission10count25 = user.MixBetCommission10count25;
-                    //user.MixBetCommission11count25 = user.MixBetCommission11count25;
+                    user.SharePercent = user.SharePercent;
                     user.CreatedBy = user.CreatedBy;
                     user.CreatedDate = user.CreatedDate;
                     _context.SaveChanges();
@@ -212,18 +199,7 @@ namespace AAA_API.Controllers
                 user.Mobile = user.Mobile;
                 user.BetLimitForMix = user.BetLimitForMix;
                 user.BetLimitForSingle = user.BetLimitForSingle;
-                //user.SingleBetCommission5 = user.SingleBetCommission5;
-                //user.SingleBetCommission8 = user.SingleBetCommission8;
-                //user.MixBetCommission2count15 = user.MixBetCommission2count15;
-                //user.MixBetCommission3count20 = user.MixBetCommission3count20;
-                //user.MixBetCommission4count20 = user.MixBetCommission4count20;
-                //user.MixBetCommission5count20 = user.MixBetCommission5count20;
-                //user.MixBetCommission6count20 = user.MixBetCommission6count20;
-                //user.MixBetCommission7count20 = user.MixBetCommission7count20;
-                //user.MixBetCommission8count20 = user.MixBetCommission8count20;
-                //user.MixBetCommission9count25 = user.MixBetCommission9count25;
-                //user.MixBetCommission10count25 = user.MixBetCommission10count25;
-                //user.MixBetCommission11count25 = user.MixBetCommission11count25;
+                user.SharePercent = user.SharePercent;
                 user.CreatedBy = user.CreatedBy;
                 user.CreatedDate = user.CreatedDate;
                 _context.SaveChanges();

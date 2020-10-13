@@ -12,7 +12,7 @@
     "IIS Express": {
       "commandName": "IISExpress",
       "launchBrowser": true,
-      "launchUrl": "api/TblFootballTeams",
+      "launchUrl": "api/Home",
       "environmentVariables": {
         "ASPNETCORE_ENVIRONMENT": "Development"
       }

@@ -241,5 +241,27 @@ namespace AAA_API.Controllers
             _context.SaveChanges();
             return Ok();
         }
+
+        // MANAGING CREDIT BALANCE :  api/Balance/credit/5
+        [HttpPut("minmax/{id}")]
+        [Authorize(Policy = "Admin")]
+        public IActionResult MinMaxCalculation(decimal id, MinMax minMax)
+        {
+            var result = _context.TblGamblingType.Find(Convert.ToInt32(id));
+            if (result == null)
+            {
+                return NotFound();
+
+            }
+
+            //Update gamblingType table
+            result.MaxBetAmount = minMax.MaxBetAmount;
+            result.MinBetAmount = minMax.MinBetAmount;
+            _context.SaveChanges();
+            return Ok(new
+            {
+                message = "Update Successfully"
+            });
+        }
     }
 }
