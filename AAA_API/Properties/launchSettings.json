@@ -20,7 +20,7 @@
     "AAA_API": {
       "commandName": "Project",
       "launchBrowser": true,
-      "launchUrl": "api/TblFootballTeams",
+      "launchUrl": "api/Home",
       "environmentVariables": {
         "ASPNETCORE_ENVIRONMENT": "Development"
       },
