@@ -55,34 +55,37 @@ namespace AAA_API.Controllers
         [AllowAnonymous]
         public IActionResult Login([FromBody] AuthenicateModel login)
         {
-            IActionResult response = Unauthorized();
+           // IActionResult response = Unauthorized();
 
             //Check username and password are empty
             if (string.IsNullOrEmpty(login.Username) || string.IsNullOrEmpty(login.Password))
             {
-                return BadRequest(new { message = "Usename or password is empty" });
+                return Ok(new { message = "Usename or password is empty" });
             }
+
+            
+
+            
 
             TblUser user = AuthenticateUser(login);
-
-            //Check logged user account is locked
-            var Userlock = _context.TblUser.Where(a => a.Username.Equals(login.Username)).FirstOrDefault().Lock;
-            if (Userlock == true)
-            {
-                return Ok(new { message = "Your account is locked!" });
-            }
 
             //Return logged user information and token
             if (user != null)
             {
+                // Check logged user account is locked
+                var Userlock = _context.TblUser.Where(a => a.Username.Equals(login.Username)).FirstOrDefault().Lock;
+                if (Userlock == true)
+                {
+                    return Ok(new { message = "Your account is locked!" });
+                }
                 var tokenString = GenerateJWTToken(user);
-                response = Ok(new
+                return Ok(new
                 {
                     token = tokenString,
                     userDetails = user,
                 });
             }
-            return response;
+            return BadRequest(new {message="Username or Password is incorrect!" });
         }
 
         //Validate user information
