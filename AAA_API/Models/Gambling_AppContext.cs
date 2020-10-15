@@ -41,7 +41,7 @@ namespace AAA_API.Models
         {
             if (!optionsBuilder.IsConfigured)
             {
-#warning To protect potentially sensitive information in your connection string, you should move it out of source code. See http://go.microsoft.com/fwlink/?LinkId=723263 for guidance on storing connection strings.
+ 
                 optionsBuilder.UseSqlServer("Data Source=172.104.40.242;Initial Catalog=Gambling_App;user id=sa;password=209851@ung");
             }
         }
