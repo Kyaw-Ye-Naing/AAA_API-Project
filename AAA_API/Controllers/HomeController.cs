@@ -69,7 +69,7 @@ namespace AAA_API.Controllers
             var Userlock = _context.TblUser.Where(a => a.Username.Equals(login.Username)).FirstOrDefault().Lock;
             if (Userlock == true)
             {
-                return BadRequest(new { message = "Your account is locked!" });
+                return Ok(new { message = "Your account is locked!" });
             }
 
             //Return logged user information and token
