@@ -831,3 +831,5 @@ C:\Users\Lenovo\Desktop\AAA_API-Project\AAA_API-Project\AAA_API\obj\Debug\netcor
 C:\Users\Lenovo\Desktop\AAA_API-Project\AAA_API-Project\AAA_API\obj\Debug\netcoreapp3.1\AAA_API.dll
 C:\Users\Lenovo\Desktop\AAA_API-Project\AAA_API-Project\AAA_API\obj\Debug\netcoreapp3.1\AAA_API.pdb
 C:\Users\Lenovo\Desktop\AAA_API-Project\AAA_API-Project\AAA_API\obj\Debug\netcoreapp3.1\AAA_API.genruntimeconfig.cache
+C:\Users\Lenovo\Desktop\AAA_API-Project\AAA_API-Project\AAA_API\obj\Debug\netcoreapp3.1\AAA_API.csproj.CoreCompileInputs.cache
+C:\Users\Lenovo\Desktop\AAA_API-Project\AAA_API-Project\AAA_API\obj\Debug\netcoreapp3.1\AAA_API.MvcApplicationPartsAssemblyInfo.cache

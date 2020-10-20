@@ -1,6 +1,7 @@
 using System;
 using System.Text;
 using AAA_API.Models;
+using AAA_API.Models.Data;
 using Microsoft.AspNetCore.Authentication.JwtBearer;
 using Microsoft.AspNetCore.Builder;
 using Microsoft.AspNetCore.Hosting;

@@ -21,9 +21,5 @@
     <PackageReference Include="RestSharp" Version="106.11.4" />
   </ItemGroup>
 
-  <ItemGroup>
-    <Folder Include="Services\" />
-  </ItemGroup>
-
 
 </Project>

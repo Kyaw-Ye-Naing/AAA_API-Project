@@ -5,6 +5,7 @@ using Microsoft.AspNetCore.Mvc;
 using Microsoft.EntityFrameworkCore;
 using AAA_API.Models;
 using Microsoft.AspNetCore.Authorization;
+using AAA_API.Models.Data;
 
 namespace AAA_API.Controllers
 {
