@@ -27,7 +27,7 @@ namespace AAA_API.Controllers
             TblGambling tblGambling = new TblGambling
             {
                 PostingNo = userBetting.PostingNo,
-                TransactionTypeId=9,
+                TransactionTypeId=10,
                 GamblingTypeId = userBetting.GamblingTypeId,
                 EventId = userBetting.EventId,
                 RapidEventId = userBetting.RapidEventId,
@@ -58,7 +58,7 @@ namespace AAA_API.Controllers
 
             TblUserPosting userPosting = new TblUserPosting() {
                 PostingNo = userBetting.PostingNo,
-                TransactionTypeId=9,
+                TransactionTypeId=10,
                 UserId = userBetting.UserId,
                 Inward = 0,
                 Outward= userBetting.Amount,
@@ -73,7 +73,7 @@ namespace AAA_API.Controllers
             TblUserPosting parent_userPosting = new TblUserPosting()
             {
                 PostingNo = userBetting.PostingNo,
-                TransactionTypeId = 10,
+                TransactionTypeId = 9,
                 UserId = parentId,
                 Inward = userBetting.Amount,
                 Outward = 0,
