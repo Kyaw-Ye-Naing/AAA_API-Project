@@ -3,7 +3,7 @@ using System.Collections.Generic;
 
 namespace AAA_API.Models.Data
 {
-    public partial class ViewUserBalance1
+    public partial class ViewUserBalance
     {
         public decimal? UserId { get; set; }
         public decimal? Inward { get; set; }

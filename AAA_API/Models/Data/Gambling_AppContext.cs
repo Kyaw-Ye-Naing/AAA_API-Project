@@ -36,7 +36,7 @@ namespace AAA_API.Models.Data
         public virtual DbSet<TblUserCommission> TblUserCommission { get; set; }
         public virtual DbSet<TblUserCommissionType> TblUserCommissionType { get; set; }
         public virtual DbSet<TblUserPosting> TblUserPosting { get; set; }
-        public virtual DbSet<ViewUserBalance2> ViewUserBalance { get; set; }
+        public virtual DbSet<ViewUserBalance> ViewUserBalance { get; set; }
 
         protected override void OnConfiguring(DbContextOptionsBuilder optionsBuilder)
         {
@@ -708,7 +708,7 @@ namespace AAA_API.Models.Data
                     .HasColumnType("decimal(18, 0)");
             });
 
-            modelBuilder.Entity<ViewUserBalance2>(entity =>
+            modelBuilder.Entity<ViewUserBalance>(entity =>
             {
                 entity.HasNoKey();
 

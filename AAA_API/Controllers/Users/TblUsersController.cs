@@ -266,9 +266,9 @@ namespace AAA_API.Controllers
             var user_id = User.FindFirst("userId")?.Value;
             var id = _context.TblUser.Where(a => a.CreatedBy == Decimal.Parse(user_id)).First().UserId;
             List<TblUserPosting> postings = _context.TblUserPosting.ToList();
-            List<ViewUserBalance1> result = postings
+            List<ViewUserBalance> result = postings
                  .GroupBy(l => l.UserId)
-                 .Select(cl => new ViewUserBalance1
+                 .Select(cl => new ViewUserBalance
                  {
                      UserId = cl.First().UserId,
                      Inward = cl.Sum(c => c.Inward),

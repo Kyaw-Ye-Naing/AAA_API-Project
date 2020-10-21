@@ -28,12 +28,11 @@ namespace AAA_API.Controllers
         }
 
         // CACULATION TOTAL AMOUNT : api/UserBalance/balance
-        [HttpGet]
+        [HttpGet("balance/{id}")]
         [AllowAnonymous]
-        [Route("balance")]
-        public async Task<List<ViewUserBalance>> UserBalance()
+        public async Task<List<UserBalance>> UserBalance(decimal id)
         {
-            var response = new List<ViewUserBalance>();
+            var response = new List<UserBalance>();
             var connString = _configuartion.GetConnectionString("DefaultConnection");
             SqlConnection sql = new SqlConnection(connString);
             try
@@ -47,7 +46,7 @@ namespace AAA_API.Controllers
                 {
                     CommandType = CommandType.StoredProcedure
                 };
-                cmd.Parameters.AddWithValue("@userId", 1);
+                cmd.Parameters.AddWithValue("@userId",id);
 
                 using (var reader = cmd.ExecuteReader())
                 {
@@ -70,9 +69,9 @@ namespace AAA_API.Controllers
         }
 
         //Read data from user balance stored procedure
-        private ViewUserBalance MapToValue(SqlDataReader reader)
+        private UserBalance MapToValue(SqlDataReader reader)
         {
-            return new ViewUserBalance()
+            return new UserBalance()
             {
                 UserId = Convert.ToDecimal(reader["userId"].ToString()),
                 UserName = reader["userName"].ToString(),
